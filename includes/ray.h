@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec3.h                                             :+:      :+:    :+:   */
+/*   ray.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 16:03:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/09/30 04:11:50 by joockim          ###   ########.fr       */
+/*   Created: 2020/09/29 20:32:42 by joockim           #+#    #+#             */
+/*   Updated: 2020/09/30 03:58:09 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _VEC3_H_
-# define _VEC3_H_
+#ifndef _RAY_H_
+# define _RAY_H_
 
-# include "mlx.h"
 # include <math.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include "vec3.h"
 
-typedef struct	s_p3
-{
-	double	x;
-	double	y;
-	double	z;
-}				t_p3;
-
-t_p3	vdefine(double x, double y, double z);
-t_p3	vadd(t_p3 a, t_p3 b);
-t_p3	vsubstract(t_p3 a, t_p3 b);
-double	vdot(t_p3 a, t_p3 b);
-t_p3	vcross(t_p3 a, double t);
-t_p3	vscalarmul(t_p3 a, double t);
-t_p3	vscalardiv(t_p3 a, double t);
-double	vlen(t_p3 a);
-t_p3	vunit(t_p3 a);
+t_p3	raydefine(t_p3 origin, t_p3 dir, float t);
+t_p3	ray_color(t_p3 dir);
 #endif
