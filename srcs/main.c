@@ -6,82 +6,57 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/07 09:50:30 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/09 19:06:16 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
-#include "../includes/vec3.h"
 #include "../includes/ray.h"
+#include "../includes/minirt.h"
 
-typedef struct	s_mlx
+void	open_check(int ac, char **av)
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*img_ptr;
-	int		*data;
-	int		bpp;
-	int		size_l;
-	int		endian;
-}	t_mlx;
+	int	len;
 
-t_mlx app;
-
-int	main()
-{
-	float		aspect_ratio = 16.0 / 9.0;
-	const int	image_width = 256;
-	const int	image_height = 256;
-
-	float		viewport_height = 2.0;
-	float		viewport_width = aspect_ratio * viewport_height;
-	float		focal_length = 1.0;
-
-	t_p3		origin = vdefine(0, 0, 0);
-	t_p3		horizontal = vdefine(viewport_width, 0, 0);
-	t_p3		vertical = vdefine(0, viewport_height, 0);
-	t_p3		lower_left_corner;
-	lower_left_corner.x = origin.x - horizontal.x / 2 - vertical.x / 2;
-	lower_left_corner.y = origin.y - horizontal.y / 2 - vertical.y / 2;
-	lower_left_corner.z = origin.z - horizontal.z / 2 - vertical.z / 2 - focal_length;
-
-	t_p3		pixel_color;
-
-	app.mlx_ptr = mlx_init();
-	app.win_ptr = mlx_new_window(app.mlx_ptr, image_width, image_height, "PPM image");
-	app.img_ptr = mlx_new_image(app.mlx_ptr, image_width, image_height);
-	app.data = (int *)mlx_get_data_addr(app.img_ptr, &app.bpp, &app.size_l, &app.endian);
-
-	int j = 0;
-	while (j < image_height)
+	if (ac < 2 || ac > 3)
 	{
-		int i = 0;
-		while (i < image_width)
-		{
-			float u = (double)i / (image_width - 1);
-			float v = (image_height - (double)j - 1) / (image_height - 1);
-
-			t_p3 ray;
-			ray = lower_left_corner;
-			ray = vadd(ray, vscalarmul(horizontal, u));
-			ray = vadd(ray, vscalarmul(vertical, v));
-			ray = vsubstract(ray, origin);
-			ray = ray_color(ray);
-
-			int ir = 255.999 * ray.x;
-			int ig = 255.999 * ray.y;
-			int ib = 255.999 * ray.z;
-			
-			pixel_color.x = ir * 256 * 256;
-			pixel_color.y = ig * 256;
-			pixel_color.z = ib;
-
-			int color = pixel_color.x + pixel_color.y + pixel_color.z;
-			app.data[j * image_width + i] = mlx_get_color_value(app.mlx_ptr, color);
-			++i;
-		}
-		++j;
+		write(1, "Invalid argument\n", 17);
+		exit(1);
 	}
-	mlx_put_image_to_window(app.mlx_ptr, app.win_ptr, app.img_ptr, 0, 0);
-	mlx_loop(app.mlx_ptr);
+	if (ac == 2 && ft_strncmp(av[1] + ft_strlen(av[1]) - 3, ".rt", 3 ))
+	{
+		write(1, "Invalid argument : second argument\n", 35);
+		exit(1);
+	}
+	if (ac == 3 && ft_strncmp(av[2], "--save", 6))
+	{
+		write(1, "Invalid argument : third argumnet must be --save\n", 49);
+		exit(1);
+	}
+}
+
+void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
+{
+	char	*str;
+	int		fd;
+
+	*lst = NULL;
+	data->l = NULL;
+	mlx->cam = NULL;
+	printf("%s\n", av[1]);
+	if ((fd = open(av[1], 0)) ==  -1)
+		exit(1);
+	printf("%d\n", fd);
+}
+
+int	main(int ac, char **av)
+{
+	t_mlx	mlx;
+	t_scene	data;
+	t_fig	*lst;
+
+	open_check(ac, av);
+	parsing(&mlx, &data, &lst, av);
+	
+	return (0);
 }

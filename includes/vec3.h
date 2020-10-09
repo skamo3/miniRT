@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:03:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/09/30 04:11:50 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/08 19:29:47 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,19 @@
 # include <stdio.h>
 # include <unistd.h>
 
+
 typedef struct	s_p3
 {
 	double	x;
 	double	y;
 	double	z;
 }				t_p3;
+
+typedef struct	s_v3
+{
+	t_p3	o;
+	t_p3	d;
+}				t_v3;
 
 t_p3	vdefine(double x, double y, double z);
 t_p3	vadd(t_p3 a, t_p3 b);
