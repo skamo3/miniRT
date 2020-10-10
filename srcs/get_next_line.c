@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/25 15:24:30 by marvin            #+#    #+#             */
-/*   Updated: 2020/10/09 18:32:26 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/11 00:00:07 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "../includes/get_next_line.h"
 
 int		buf_check(char *buf)
 {

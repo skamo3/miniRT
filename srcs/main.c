@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/09 19:06:16 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/11 06:25:51 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 
 void	open_check(int ac, char **av)
 {
-	int	len;
-
 	if (ac < 2 || ac > 3)
 	{
 		write(1, "Invalid argument\n", 17);
@@ -46,7 +44,8 @@ void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 	printf("%s\n", av[1]);
 	if ((fd = open(av[1], 0)) ==  -1)
 		exit(1);
-	printf("%d\n", fd);
+	while (get_next_line(fd, &str))
+		printf("%s\n", str);
 }
 
 int	main(int ac, char **av)
