@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/10 23:35:10 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/11 19:17:01 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "../libft/libft.h"
+# include "../utils/libft/libft.h"
+# include "../utils/libftprintf/include/ft_printf.h"
 # include "get_next_line.h"
 # include "vec3.h"
 # include "figures.h"

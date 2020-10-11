@@ -6,18 +6,21 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/11 06:33:25 by joockim          ###   ########.fr        #
+#    Updated: 2020/10/11 19:19:00 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = miniRT
+NAME = RT
 
 CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra
 
-MLX_FLAGS = -I minilibx -L ./minilibX -lmlx -framework OpenGL -framework AppKit
+UTILS = utils/
 
+LIBFT_FLAGS = -L ${UTILS}libft -lft -L ${UTILS}libftprintf -lftprintf
+
+MLX_FLAGS = -I minilibx -L ./minilibX -lmlx -framework OpenGL -framework AppKit
 
 SRCS = $(addprefix ./srcs/, \
 	   get_next_line.c \
@@ -25,10 +28,25 @@ SRCS = $(addprefix ./srcs/, \
 
 OBJS = ${SRCS:.c=.o}
 
-.PHONY : all clean fclean 
+FLAGS = ${CFLAGS} ${LIBFT_FLAGS} ${MLX_FLAGS}
+
+.PHONY : all clean fclean re
 
 ${NAME} : ${OBJS}
-	make -C libft
-	${CC} ${MLX_FLAGS} ${OBJS} -o ${NAME}
+	make -C ${UTILS}libft
+	make -C ${UTILS}libftprintf
+	${CC} ${FLAGS} ${OBJS} -o ${NAME}
 
 all : ${NAME}
+
+clean :
+	make clean -C ${UTILS}libft
+	make clean -C ${UTILS}libftprintf
+	rm -f ${OBJS}
+
+fclean : clean
+	make fclean -C ${UTILS}libft
+	make fclean -C ${UTILS}libftprintf
+	rm -rf ${NAME}
+
+re : fclean all

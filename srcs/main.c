@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/11 06:25:51 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/11 20:32:08 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,27 @@
 #include "../includes/ray.h"
 #include "../includes/minirt.h"
 
-void	open_check(int ac, char **av)
+void	error_check(int n)
 {
-	if (ac < 2 || ac > 3)
-	{
-		write(1, "Invalid argument\n", 17);
-		exit(1);
-	}
-	if (ac == 2 && ft_strncmp(av[1] + ft_strlen(av[1]) - 3, ".rt", 3 ))
-	{
-		write(1, "Invalid argument : second argument\n", 35);
-		exit(1);
-	}
-	if (ac == 3 && ft_strncmp(av[2], "--save", 6))
-	{
-		write(1, "Invalid argument : third argumnet must be --save\n", 49);
-		exit(1);
-	}
+	if (n == 1)
+		ft_printf("Invalid argument : Wrong args\n");
+	if (n == 2)
+		ft_printf("Invalid argument : check file name .rt\n");
+	if (n == 3)
+		ft_printf("Invalid argument : Wrong input 3rd arg");
+	exit(1);
 }
 
-void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
+void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
+{
+	*lst = NULL;
+	data->l = NULL;
+	mlx->cam = NULL;
+
+	str = 0;
+}
+
+void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 {
 	char	*str;
 	int		fd;
@@ -45,7 +46,7 @@ void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 	if ((fd = open(av[1], 0)) ==  -1)
 		exit(1);
 	while (get_next_line(fd, &str))
-		printf("%s\n", str);
+		parsing(mlx, data, lst, str);
 }
 
 int	main(int ac, char **av)
@@ -54,8 +55,13 @@ int	main(int ac, char **av)
 	t_scene	data;
 	t_fig	*lst;
 
-	open_check(ac, av);
-	parsing(&mlx, &data, &lst, av);
+	if (ac < 2 || ac > 3)
+		error_check(1);
+	if (ac == 2 && ft_strncmp(av[1] + ft_strlen(av[1]) - 3, ".rt", 3 ))
+		error_check(2);
+	if (ac == 3 && ft_strncmp(av[2], "--save", 6))
+		error_check(3);
+	parse(&mlx, &data, &lst, av);
 	
 	return (0);
 }

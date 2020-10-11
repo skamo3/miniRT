@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/25 15:24:30 by marvin            #+#    #+#             */
-/*   Updated: 2020/10/11 06:26:25 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/11 19:01:09 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include "../libft/libft.h"
+# include "../utils/libft/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
