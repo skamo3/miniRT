@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/11 20:32:08 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/12 18:53:43 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,56 @@ void	error_check(int n)
 	if (n == 1)
 		ft_printf("Invalid argument : Wrong args\n");
 	if (n == 2)
-		ft_printf("Invalid argument : check file name .rt\n");
+		perror("Check file name :");
 	if (n == 3)
-		ft_printf("Invalid argument : Wrong input 3rd arg");
+		ft_printf("Invalid argument : Wrong input 3rd arg\n");
+	if (n == 4)
+		ft_printf("Check rt file : Invalid format\n");
 	exit(1);
 }
 
-void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
+void	parse_resolution(t_scene *data, char *str)
+{
+	int	flag;
+
+	flag = 0;
+	if (data->res_init > 0)
+		error_check(4);
+	data->res_init += 1;
+	while (*str)
+	{
+		if (*str == 32 || *str == 9)
+			str++;
+		else if (flag == 0)
+			data->xres = 
+	}
+
+}
+
+void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 {
 	*lst = NULL;
 	data->l = NULL;
 	mlx->cam = NULL;
+	printf("%s\n", str);
+	if (*str == 'R')
+		parse_resolution(data, ++str);
 
-	str = 0;
+}
+
+void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
+{
+	data->res_init = 0;
+	data->al_init = 0;
+	if (*str == '#' || *str == 0)
+		return ;
+	else
+		save_args(mlx, data, lst, str);
+
+	*lst = NULL;
+	mlx->cam = NULL;
+
+
 }
 
 void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
@@ -42,7 +79,6 @@ void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 	*lst = NULL;
 	data->l = NULL;
 	mlx->cam = NULL;
-	printf("%s\n", av[1]);
 	if ((fd = open(av[1], 0)) ==  -1)
 		exit(1);
 	while (get_next_line(fd, &str))
