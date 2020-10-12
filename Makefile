@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/11 19:19:00 by joockim          ###   ########.fr        #
+#    Updated: 2020/10/12 17:37:54 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ ${NAME} : ${OBJS}
 	make -C ${UTILS}libft
 	make -C ${UTILS}libftprintf
 	${CC} ${FLAGS} ${OBJS} -o ${NAME}
+	./RT ./scenes/sphere.rt
 
 all : ${NAME}
 
