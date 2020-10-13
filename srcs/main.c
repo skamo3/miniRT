@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/12 18:53:43 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/14 00:47:52 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,34 @@ void	error_check(int n)
 	exit(1);
 }
 
+
 void	parse_resolution(t_scene *data, char *str)
 {
-	int	flag;
+	int		flag;
+	char	**s;
 
 	flag = 0;
+	s = ft_split(str, ' ');
 	if (data->res_init > 0)
 		error_check(4);
 	data->res_init += 1;
-	while (*str)
+	while (*s)
 	{
-		if (*str == 32 || *str == 9)
-			str++;
-		else if (flag == 0)
-			data->xres = 
+		if (flag == 0)
+			data->xres = ft_atoi(*s);
+		else if (flag == 1)
+			data->yres = ft_atoi(*s);
+		flag++;
+		s++;
 	}
-
 }
+
 
 void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 {
 	*lst = NULL;
 	data->l = NULL;
 	mlx->cam = NULL;
-	printf("%s\n", str);
 	if (*str == 'R')
 		parse_resolution(data, ++str);
 
@@ -98,6 +102,6 @@ int	main(int ac, char **av)
 	if (ac == 3 && ft_strncmp(av[2], "--save", 6))
 		error_check(3);
 	parse(&mlx, &data, &lst, av);
-	
+
 	return (0);
 }
