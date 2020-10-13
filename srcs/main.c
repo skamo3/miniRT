@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/14 00:47:52 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:40:38 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,42 @@ void	parse_resolution(t_scene *data, char *str)
 	}
 }
 
+double	ft_atof(char *str)
+{
+	int		minus;
+	int		d;
+	double	res;
+
+	res = 0;
+	minus = 1;
+	while (*str == 32 || (*str > 7 && *str < 13))
+		str++;
+	if (*str == '-' && str++;)
+		minus *= -1;
+	while (ft_isdigit(*str))
+		d = d * 10 + ((*str)++ - '0');
+	if (*str == '.')
+		str++;
+	while (ft_isdigit(*str))
+		res = res * 10 + ((*str)++ - '0');
+	while (res >= 1)
+		res /= 10;
+	d += res;
+	return (res * minus);
+}
+
+void	parse_ambient(t_scene *data, char *str)
+{
+	int		flag;
+	char	**s;
+
+	flag = 0;
+	s = ft_split(str, ' ');
+	if (data->al_init > 0)
+		error_check(4);
+	data->al_init += 1;
+	printf("%s\n", str);
+}
 
 void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 {
@@ -57,6 +93,8 @@ void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 	mlx->cam = NULL;
 	if (*str == 'R')
 		parse_resolution(data, ++str);
+	else if (*str == 'A')
+		parse_ambient(data, ++str);
 
 }
 
