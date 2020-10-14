@@ -6,12 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/14 13:03:17 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/15 05:27:58 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
-#include "../includes/ray.h"
 #include "../includes/minirt.h"
 
 void	error_check(int n, char *error_message)
@@ -25,7 +24,9 @@ void	error_check(int n, char *error_message)
 	if (n == 4)
 		ft_printf("Check rt file : %s\n", error_message);
 	if (n == 5)
-		ft_printf("%s\n", error_message);
+		ft_printf("Memory error : %s\n", error_message);
+	if (n == 6)
+		ft_printf("Check rt file : %s parameter out of range\n", error_message);
 	exit(1);
 }
 
@@ -71,6 +72,7 @@ double	rt_atof(char **str)
 
 	d = 0;
 	minus = 1;
+	skip_space(str);
 	if (**str == '-' && *((*str)++))
 		minus *= -1;
 	while (ft_isdigit(**str))
@@ -89,13 +91,13 @@ double	rt_atof(char **str)
 void	check_values(double n, double min, double max, char *err)
 {
 	if (n < min || n > max)
-		error_check(4, err);
+		error_check(6, err);
 }
 
 void	comma(char **str)
 {
 	if (**str != ',')
-		error_check(4, "Wrong parameter format");
+		error_check(4, "Parameter have wrong format");
 	(*str)++;
 }
 
@@ -109,15 +111,15 @@ int		parse_color(char **str)
 	g = 0;
 	b = 0;
 	r |= rt_atoi(str);
-	check_values(r, 0, 255, "colors must be in range 0~255");
+	check_values(r, 0, 255, "color");
 	r <<= 16;
 	comma(str);
 	g |= rt_atoi(str);
-	check_values(g, 0, 255, "colors must be in range 0~255");
+	check_values(g, 0, 255, "color");
 	g <<= 8;
 	comma(str);
 	b |= rt_atoi(str);
-	check_values(b, 0, 255, "colors must be in range 0~255");
+	check_values(b, 0, 255, "color");
 	return (r | g | b);
 }
 
@@ -126,10 +128,9 @@ void	parse_ambient(t_scene *data, char *str)
 	if (data->al_init > 0)
 		error_check(4, "Double declaration Ambient lightning");
 	data->al_init += 1;
-	printf("%s\n", str);
 	skip_space(&str);
 	data->ambient_light = rt_atof(&str);
-	check_values(data->ambient_light, 0, 1, "ambient lightning out of range");
+	check_values(data->ambient_light, 0, 1, "ambient lightning");
 	data->al_color = parse_color(&str);
 }
 
@@ -139,30 +140,122 @@ void	*err_malloc(unsigned int n)
 
 	ptr = malloc(n);
 	if (ptr == NULL)
-		error_check(5, "malloc failed");
+		error_check(5, "Fail to alloc memory");
 	return (ptr);
+}
+
+t_p3	parse_p3(char **str)
+{
+	t_p3	p;
+
+	p.x = rt_atof(str);
+	comma(str);
+	p.y = rt_atof(str);
+	comma(str);
+	p.z = rt_atof(str);
+	return (p);
 }
 
 void	parse_camera(t_mlx *mlx, t_scene *data, char *str)
 {
-	t_camera	*elem;
-	t_camera	*begin;
-	int			i;
+	t_cam	*elem;
+	t_cam	*begin;
+	int			idx;
 
-	i = 0;
+	idx = 0;
 	begin = mlx->cam;
-	elem = err_malloc(sizeof(t_camera));
+	elem = err_malloc(sizeof(t_cam));
 	elem->next = NULL;
 	if (mlx->cam)
 	{
 		while (mlx->cam->next)
 			mlx->cam = mlx->cam->next;
-		i = mlx->cam->idx;
+		idx = mlx->cam->idx;
 		mlx->cam->next = elem;
 	}
 	else
 		mlx->cam = elem;
+	elem->idx = idx + 1;
+	data->cam_nb = elem->idx;
+	elem->o = parse_p3(&str);
+	elem->nv = normalize(parse_p3(&str));
+	elem->fov = rt_atoi(&str);
+	check_values(elem->fov, 0, 180, "Camera FOV");
+	mlx->cam = begin ? begin : elem;
+}
 
+void	ft_addnewlst_back(t_fig **alst)
+{
+	t_fig	*begin;
+	t_fig	*elem;
+	t_fig	*list;
+
+	begin = *alst;
+	list = *alst;
+	elem = err_malloc(sizeof(t_fig));
+	elem->next = NULL;
+	if (list)
+	{
+		while (list->next)
+			list = list->next;
+		list->next = elem;
+	}
+	else
+		begin = elem;
+	*alst = begin;
+}
+
+void	parse_cylinder(t_fig **elem, char *str)
+{
+	t_fig	*lst;
+
+	ft_addnewlst_back(elem);
+	lst = *elem;
+	while (lst->next)
+		lst = lst->next;
+	lst->flag = CY;
+	lst->fig.cy.c = parse_p3(&str);
+	lst->fig.cy.nv = normalize(parse_p3(&str));
+	lst->fig.cy.r = rt_atof(&str) / 2;
+	check_values(lst->fig.cy.r, 0, INFINITY, "Cylinder radius");
+	lst->fig.cy.h = rt_atof(&str);
+	check_values(lst->fig.cy.h, 0, INFINITY, "Cylinder height");
+	lst->specular = rt_atof(&str);
+	check_values(lst->specular, 0, INFINITY, "Cylinder specular");
+	lst->refl_idx = rt_atof(&str);
+	check_values(lst->refl_idx, 0, 1, "Cylinder reflection");
+	lst->refr_idx = rt_atof(&str);
+	check_values(lst->refr_idx, 0, INFINITY, "Cylinder refraction");
+	lst->texture = rt_atoi(&str);
+	check_values(lst->texture, 0, 5, "Cylinder texture");
+	if (lst->texture == 2)
+		lst->wavelength = rt_atof(&str);
+	lst->color = parse_color(&str);
+}
+
+void	parse_cube(t_fig **elem, char *str)
+{
+	t_fig	*lst;
+
+	ft_addnewlst_back(elem);
+	lst = *elem;
+	while (lst->next)
+		lst = lst->next;
+	lst->flag = CU;
+	lst->fig.sq.c = parse_p3(&str);
+	lst->fig.sq.side = rt_atof(&str);
+	check_values(lst->fig.sq.side, 0, INFINITY, "Square side");
+	lst->specular = rt_atoi(&str);
+	check_values(lst->specular, 0, INFINITY, "Square specular");
+	lst->refl_idx = rt_atof(&str);
+	check_values(lst->refl_idx, 0, INFINITY, "Square reflection");
+	lst->refr_idx = rt_atof(&str);
+	check_values(lst->refr_idx, 0, INFINITY, "Square refraction");
+	lst->texture = rt_atoi(&str);
+	check_values(lst->texture, 0, 5, "Square texture");
+	if (lst->texture == 2)
+		lst->wavelength = rt_atof(&str);
+	lst->color = parse_color(&str);
 }
 
 void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
@@ -175,7 +268,11 @@ void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 	else if (*str == 'A')
 		parse_ambient(data, ++str);
 	else if (*str == 'c' && (*(str + 1) == 32 || *(str + 1) == 9))
-			parse_camera(mlc, data, ++str);
+		parse_camera(mlx, data, ++str);
+	else if (*str == 'c' && *(str + 1) == 'y' && *(str++) && *(str++))
+		parse_cylinder(lst, str);
+	else if (*str == 'c' && *(str + 1) == 'u' && *(str++) && *(str++))
+		parse_cube(lst, str);
 
 }
 
@@ -187,10 +284,6 @@ void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 		return ;
 	else
 		save_args(mlx, data, lst, str);
-
-	*lst = NULL;
-	mlx->cam = NULL;
-
 
 }
 

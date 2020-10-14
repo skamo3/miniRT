@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/11 19:17:01 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/15 04:35:28 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,19 @@
 # include "../utils/libft/libft.h"
 # include "../utils/libftprintf/include/ft_printf.h"
 # include "get_next_line.h"
-# include "vec3.h"
+# include "../utils/vec/vec3.h"
 # include "figures.h"
 # include <stdio.h>
+
+# define SP 0
+# define PL 1
+# define SQ 2
+# define TR 3
+# define CY 4
+# define CU 5
+# define PY 6
+
+# define EPSILON 0.00001
 
 typedef struct	s_fig
 {
@@ -31,6 +41,11 @@ typedef struct	s_fig
 	union u_fig		fig;
 	int				color;
 	t_p3			normal;
+	int				specular;
+	double			refl_idx;
+	double			refr_idx;
+	int				texture;
+	double			wavelength;
 	struct s_fig	*next;
 }				t_fig;
 
@@ -44,7 +59,7 @@ typedef struct		s_light
 
 typedef struct	s_cam
 {
-	int				i;
+	int				idx;
 	t_p3			o;
 	t_p3			nv;
 	int				fov;
@@ -53,7 +68,7 @@ typedef struct	s_cam
 	int				bits_per_pixel;
 	int				size_line;
 	int				endian;
-	struct s_camera	*next;
+	struct s_cam	*next;
 }				t_cam;
 
 typedef struct	s_scene
