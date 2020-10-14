@@ -6,13 +6,13 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/21 18:13:06 by joockim           #+#    #+#             */
-/*   Updated: 2020/08/20 20:34:39 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/14 09:25:20 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_printf.h"
 
-int		ft_isdigit(int c)
+int		ft_isdigit_pr(int c)
 {
 	return (c >= '0' && c <= '9');
 }
@@ -31,7 +31,7 @@ int		get_int(const char *str, t_item *t)
 	int r;
 
 	r = 0;
-	while (ft_isdigit(str[t->i]))
+	while (ft_isdigit_pr(str[t->i]))
 	{
 		r = r * 10 + (str[t->i] - '0');
 		t->i++;
@@ -77,7 +77,7 @@ void	make_flag(const char *str, t_item *t)
 			t->flag.zero = 1;
 		t->i++;
 	}
-	if (ft_isdigit(str[t->i]) && !t->flag.dot)
+	if (ft_isdigit_pr(str[t->i]) && !t->flag.dot)
 		t->flag.width = get_int(str, t);
 	if (str[t->i] == '*')
 		star(t);
@@ -85,7 +85,7 @@ void	make_flag(const char *str, t_item *t)
 	{
 		t->flag.dot = 1;
 		t->i++;
-		if (ft_isdigit(str[t->i]))
+		if (ft_isdigit_pr(str[t->i]))
 			t->flag.prec = get_int(str, t);
 		if (str[t->i] == '*' && t->flag.prec == -1)
 			star(t);

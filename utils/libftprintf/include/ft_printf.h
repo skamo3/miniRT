@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/21 18:15:29 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/11 19:28:17 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/14 09:22:42 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			init_flag(t_flag *t);
 int				get_int(const char *str, t_item *t);
 void			star(t_item *t);
 void			make_flag(const char *str, t_item *t);
-int				ft_isdigit(int c);
+int				ft_isdigit_pr(int c);
 int				ft_strlen_pr(char *str);
 int				putchar_len(char *str, int len);
 char			*ft_strdup_pr(const char *string);
