@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/15 04:11:56 by joockim          ###   ########.fr        #
+#    Updated: 2020/10/15 20:16:12 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = RT
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
 
 UTILS = utils/
 
@@ -24,6 +24,13 @@ MLX_FLAGS = -I minilibx -L ./minilibX -lmlx -framework OpenGL -framework AppKit
 
 SRCS = $(addprefix ./srcs/, \
 	   get_next_line.c \
+	   error_checking.c \
+	   parse1.c \
+	   parse2.c \
+	   parse3.c \
+	   parse4.c \
+	   parse_utils1.c \
+	   parse_utils2.c\
 	   main.c)
 
 OBJS = ${SRCS:.c=.o}

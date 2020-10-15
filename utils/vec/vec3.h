@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:03:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 03:28:41 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/15 17:31:31 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_p3	vdefine(double x, double y, double z);
 t_p3	vadd(t_p3 a, t_p3 b);
 t_p3	vsubstract(t_p3 a, t_p3 b);
 double	vdot(t_p3 a, t_p3 b);
-t_p3	cross(t_p3 a, t_p3 b);
+t_p3	vcross(t_p3 a, t_p3 b);
 t_p3	scal_x_vec(t_p3 a, double t);
 double	mod(t_p3 v);
 t_p3	normalize(t_p3 v);

@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:19:47 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/09 18:19:49 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/15 16:38:23 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct	s_sp
 
 typedef struct	s_pl
 {
-	t_p3	c;
+	t_p3	p;
 }				t_pl;
 
 typedef struct	s_sq
