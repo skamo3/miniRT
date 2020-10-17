@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 20:16:17 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/17 17:25:11 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@
 # define CY 4
 # define CU 5
 # define PY 6
+
+# define WIN_SIZE_X 1920
+# define WIN_SIZE_Y 1080
+
+# define THREAD_NUM 4
 
 # define EPSILON 0.00001
 
@@ -91,6 +96,16 @@ typedef struct	s_mlx
 	t_cam	*cam;
 	t_cam	*begin;
 }				t_mlx;
+
+typedef struct	s_wrap
+{
+	t_mlx	mlx;
+	t_scene	data;
+	t_fig	*lst;
+	int		thread_id;
+	int		x;
+	int		y;
+}				t_wrap;
 
 void	error_check(int n, char *error_message);
 void	check_values(double n, double min, double max, char *err);
