@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/17 17:25:15 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 01:58:22 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,37 @@ void	init_mlx(t_mlx *mlx, t_scene *data)
 	mlx->cam = cam_begin;
 }
 
+void	wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper)
+{
+	int i;
+
+	i = 0;
+	while (i < THREAD_NUM)
+	{
+		wrapper[i].mlx = mlx;
+		wrapper[i].data = data;
+		wrapper[i].lst = lst;
+		wrapper[i].thread_id = i;
+		i++;	
+	}
+}
+
+void	multithreading(t_wrap wrapper[THREAD_NUM])
+{
+	pthread_t	threads[THREAD_NUM];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_NUM)
+	{
+		pthread_create(&threads[i], NULL, render_thread, &wrapper[i]);
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_NUM)
+		pthread_join(threads[i++], NULL);
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx	mlx;
@@ -46,5 +77,7 @@ int	main(int ac, char **av)
 		error_check(3, "");
 	parse(&mlx, &data, &lst, av);
 	init_mlx(&mlx, &data);
+	wrap_data(mlx, data, lst, wrapper);
+	multithreading(wrapper);
 	return (0);
 }

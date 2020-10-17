@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/17 17:25:11 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 01:51:45 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "get_next_line.h"
 # include "../utils/vec/vec3.h"
 # include "figures.h"
+# include <pthread.h>
 # include <stdio.h>
 
 # define SP 0
