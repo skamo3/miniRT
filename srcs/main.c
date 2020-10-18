@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 01:58:22 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 20:15:20 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,19 @@ void	wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper)
 	}
 }
 
-void	multithreading(t_wrap wrapper[THREAD_NUM])
+static void	*render_thread(void *ptr)
+{
+	t_wrap	*w;
+
+	w = (t_wrap *)ptr;
+	while (w->mlx.cam)
+	{
+		w->mlx.cam = w->mlx.cam->next;
+	}
+	return (NULL);
+}
+
+void	multithreading(t_wrap *wrapper)
 {
 	pthread_t	threads[THREAD_NUM];
 	int			i;
@@ -54,12 +66,33 @@ void	multithreading(t_wrap wrapper[THREAD_NUM])
 	i = 0;
 	while (i < THREAD_NUM)
 	{
+		printf("%d\n", wrapper[i].thread_id);
 		pthread_create(&threads[i], NULL, render_thread, &wrapper[i]);
 		i++;
 	}
 	i = 0;
 	while (i < THREAD_NUM)
 		pthread_join(threads[i++], NULL);
+}
+
+int		key_press(int keycode, t_mlx *mlx)
+{
+	if (keycode == 53)
+	{
+		ft_printf("Program close with press \"esc\" key\n");
+		exit(0);
+	}
+	mlx->cam = mlx->cam;
+	return (1);
+}
+
+void	start_mlx(t_mlx mlx, t_scene data)
+{
+	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, data.xres, data.yres,
+			"miniRT");
+	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.cam->img_ptr, 0, 0);
+	mlx_hook(mlx.win_ptr, 2, 0, key_press, &mlx);
+	mlx_loop(mlx.mlx_ptr);
 }
 
 int	main(int ac, char **av)
@@ -79,5 +112,7 @@ int	main(int ac, char **av)
 	init_mlx(&mlx, &data);
 	wrap_data(mlx, data, lst, wrapper);
 	multithreading(wrapper);
+
+	start_mlx(mlx, data);
 	return (0);
 }

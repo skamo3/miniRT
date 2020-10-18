@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 19:02:54 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 19:41:08 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 18:50:17 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	error_check(int n, char *error_message)
 {
+	ft_printf("Error\n");
 	if (n == 1)
 		ft_printf("Invalid argument : Wrong args\n");
 	if (n == 2)

@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 01:09:49 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 03:38:29 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 18:33:56 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ double	mod(t_p3 v)
 
 t_p3	normalize(t_p3 v)
 {
-	t_p3 nv;
-	double mod;
+	t_p3	nv;
+	double	mod;
 
 	mod = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	nv.x = v.x / mod;

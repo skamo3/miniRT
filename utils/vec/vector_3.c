@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 01:59:33 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 03:28:01 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 18:32:59 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ double	distance(t_p3 a, t_p3 b)
 	double	d;
 
 	d = sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2) + pow(b.z - a.z, 2));
-	return d;
+	return (d);
 }
 
 t_p3	x_axis_rotation(t_p3 v, double angle)
