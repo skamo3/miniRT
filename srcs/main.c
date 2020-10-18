@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 20:15:20 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 21:32:25 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,58 +31,21 @@ void	init_mlx(t_mlx *mlx, t_scene *data)
 	mlx->cam = cam_begin;
 }
 
-void	wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper)
-{
-	int i;
-
-	i = 0;
-	while (i < THREAD_NUM)
-	{
-		wrapper[i].mlx = mlx;
-		wrapper[i].data = data;
-		wrapper[i].lst = lst;
-		wrapper[i].thread_id = i;
-		i++;	
-	}
-}
-
-static void	*render_thread(void *ptr)
-{
-	t_wrap	*w;
-
-	w = (t_wrap *)ptr;
-	while (w->mlx.cam)
-	{
-		w->mlx.cam = w->mlx.cam->next;
-	}
-	return (NULL);
-}
-
-void	multithreading(t_wrap *wrapper)
-{
-	pthread_t	threads[THREAD_NUM];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_NUM)
-	{
-		printf("%d\n", wrapper[i].thread_id);
-		pthread_create(&threads[i], NULL, render_thread, &wrapper[i]);
-		i++;
-	}
-	i = 0;
-	while (i < THREAD_NUM)
-		pthread_join(threads[i++], NULL);
-}
-
 int		key_press(int keycode, t_mlx *mlx)
 {
 	if (keycode == 53)
 	{
-		ft_printf("Program close with press \"esc\" key\n");
+		ft_printf("Exit program with press \"esc\" key\n");
 		exit(0);
 	}
 	mlx->cam = mlx->cam;
+	return (1);
+}
+
+int		close_red_button()
+{
+	ft_printf("Exit program with press \"red button\"\n");
+	exit(0);
 	return (1);
 }
 
@@ -91,8 +54,14 @@ void	start_mlx(t_mlx mlx, t_scene data)
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, data.xres, data.yres,
 			"miniRT");
 	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.cam->img_ptr, 0, 0);
-	mlx_hook(mlx.win_ptr, 2, 0, key_press, &mlx);
+	mlx_hook(mlx.win_ptr, KEY_PRESS, 0, key_press, &mlx);
+	mlx_hook(mlx.win_ptr, PRESS_RED_BUTTON, 0, close_red_button, 0); 
 	mlx_loop(mlx.mlx_ptr);
+}
+
+void	render_scene(t_wrap *w)
+{
+	return ;
 }
 
 int	main(int ac, char **av)

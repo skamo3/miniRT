@@ -6,12 +6,12 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 01:51:45 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/18 21:32:29 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _MINIRT_H_
-# define _MINIRT_H_
+#ifndef MINIRT_H
+# define MINIRT_H
 
 # include "mlx.h"
 # include <math.h>
@@ -23,6 +23,7 @@
 # include "get_next_line.h"
 # include "../utils/vec/vec3.h"
 # include "figures.h"
+# include "key_code.h"
 # include <pthread.h>
 # include <stdio.h>
 
@@ -108,30 +109,33 @@ typedef struct	s_wrap
 	int		y;
 }				t_wrap;
 
-void	error_check(int n, char *error_message);
-void	check_values(double n, double min, double max, char *err);
-void	comma(char **str);
-int		parse_color(char **str);
-void	*err_malloc(unsigned int n);
-t_p3	parse_p3(char **str);
-void	ft_addnewlst_back(t_fig **alst);
-void	skip_space(char **str);
-int		rt_atoi(char **str);
-double	rt_atof(char **str);
-void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
-void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av);
-void	parse_resolution(t_scene *data, char *str);
-void	parse_ambient(t_scene *data, char *str);
-void	parse_camera(t_mlx *mlx, t_scene *data, char *str);
-void	parse_light(t_scene **data, char *str);
-void	parse_cylinder(t_fig **elem, char *str);
-void	parse_sphere(t_fig **elem, char *str);
-void	parse_square(t_fig **elem, char *str);
-void	parse_plane(t_fig **elem, char *str);
-void	parse_triangle(t_fig **elem, char *str);
-void	parse_cube(t_fig **elem, char *str);
-void	parse_pyramid(t_fig **elem, char *str);
-void	save_args2(t_fig **lst, char *str);
-void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+void		error_check(int n, char *error_message);
+void		check_values(double n, double min, double max, char *err);
+void		comma(char **str);
+int			parse_color(char **str);
+void		*err_malloc(unsigned int n);
+t_p3		parse_p3(char **str);
+void		ft_addnewlst_back(t_fig **alst);
+void		skip_space(char **str);
+int			rt_atoi(char **str);
+double		rt_atof(char **str);
+void		parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+void		parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av);
+void		parse_resolution(t_scene *data, char *str);
+void		parse_ambient(t_scene *data, char *str);
+void		parse_camera(t_mlx *mlx, t_scene *data, char *str);
+void		parse_light(t_scene **data, char *str);
+void		parse_cylinder(t_fig **elem, char *str);
+void		parse_sphere(t_fig **elem, char *str);
+void		parse_square(t_fig **elem, char *str);
+void		parse_plane(t_fig **elem, char *str);
+void		parse_triangle(t_fig **elem, char *str);
+void		parse_cube(t_fig **elem, char *str);
+void		parse_pyramid(t_fig **elem, char *str);
+void		save_args2(t_fig **lst, char *str);
+void		save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+static void	*render_thread(void *ptr);
+void		multithreading(t_wrap *wrapper);
+void		wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
 int		main(int ac, char **av);
 #endif
