@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/19 17:52:47 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/19 18:02:33 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ void	start_mlx(t_mlx mlx, t_scene data)
 
 int calc_pixel_color(int *edge_color, int last[2], t_wrap *w)
 {
-	edge_color[0] = 0;
-	last[0] = 0;
-	w = 0;
+
 	return (0);
 }
 
@@ -76,6 +74,7 @@ void	render_scene(t_wrap *w)
 
 	n = w->data.yres / THREAD_NUM;
 	w->y = n * w->thread_id;
+	printf("%d\n", w->y);
 	while (w->y < (n * (w->thread_id + 1)))
 	{
 		w->x = 0;
@@ -86,6 +85,8 @@ void	render_scene(t_wrap *w)
 			w->x++;
 		}
 		if (w->thread_id == THREAD_NUM - 1)
+			ft_printf("\rRendering scene (cam %d/%d) [%d%%]",
+					w->mlx.cam->idx, w->data.cam_nb, 100 * (w->y % n) / n);
 		w->y++;
 	}
 	if (w->thread_id == THREAD_NUM - 1)

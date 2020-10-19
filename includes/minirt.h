@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/19 14:36:15 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/19 18:02:15 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define WIN_SIZE_X 1920
 # define WIN_SIZE_Y 1080
 
-# define THREAD_NUM 4
+# define THREAD_NUM 1
 
 # define EPSILON 0.00001
 
@@ -108,6 +108,15 @@ typedef struct	s_wrap
 	int		x;
 	int		y;
 }				t_wrap;
+
+typedef struct	s_rss
+{
+	int	limit;
+	int	xres;
+	int	yres;
+	int	x;
+	int	y;
+}				t_rss;
 
 void		error_check(int n, char *error_message);
 void		check_values(double n, double min, double max, char *err);
