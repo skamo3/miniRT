@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/18 21:33:00 by joockim          ###   ########.fr        #
+#    Updated: 2020/10/19 14:27:09 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS = $(addprefix ./srcs/, \
 	   parse4.c \
 	   parse_utils1.c \
 	   parse_utils2.c\
+	   thread.c \
 	   main.c)
 
 OBJS = ${SRCS:.c=.o}

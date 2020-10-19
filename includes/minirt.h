@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 21:32:29 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/19 14:36:15 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ void		parse_cube(t_fig **elem, char *str);
 void		parse_pyramid(t_fig **elem, char *str);
 void		save_args2(t_fig **lst, char *str);
 void		save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
-static void	*render_thread(void *ptr);
 void		multithreading(t_wrap *wrapper);
 void		wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
+void		render_scene(t_wrap *w);
 int		main(int ac, char **av);
 #endif

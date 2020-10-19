@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 21:32:25 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:52:47 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,38 @@ void	start_mlx(t_mlx mlx, t_scene data)
 	mlx_loop(mlx.mlx_ptr);
 }
 
+int calc_pixel_color(int *edge_color, int last[2], t_wrap *w)
+{
+	edge_color[0] = 0;
+	last[0] = 0;
+	w = 0;
+	return (0);
+}
+
 void	render_scene(t_wrap *w)
 {
+	int	edge_color[w->data.xres + 2];
+	int	last[2];
+	int	color;
+	int	n;
+
+	n = w->data.yres / THREAD_NUM;
+	w->y = n * w->thread_id;
+	while (w->y < (n * (w->thread_id + 1)))
+	{
+		w->x = 0;
+		while (w->x < w->data.xres)
+		{
+			color = calc_pixel_color(edge_color, last, w);
+			w->mlx.cam->px_img[w->y * w->data.xres + w->x] = color;
+			w->x++;
+		}
+		if (w->thread_id == THREAD_NUM - 1)
+		w->y++;
+	}
+	if (w->thread_id == THREAD_NUM - 1)
+		ft_printf("\rRendering scene (cam %d/%d) [100%%]\n",
+				w->mlx.cam->idx, w->data.cam_nb);
 	return ;
 }
 
