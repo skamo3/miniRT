@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/21 16:14:30 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/21 21:33:12 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void	render_scene(t_wrap *w)
 
 	n = w->data.yres / THREAD_NUM;
 	w->y = n * w->thread_id;
-	printf("%d\n", w->y);
 	while (w->y < (n * (w->thread_id + 1)))
 	{
 		w->x = 0;

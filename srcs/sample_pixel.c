@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:08:10 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/21 19:24:53 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/21 20:38:14 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	*sample_last(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 int		*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 {
 	int	*color;
-	printf("%d\n", rss.x);
+
 	if (rss.x == 0)
 		color = sample_first(edge_color, last, rss, w);
 	else if (rss.x == w->data.xres - 1)
