@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/19 18:02:15 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/21 19:21:04 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,7 @@ void		save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
 void		multithreading(t_wrap *wrapper);
 void		wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
 void		render_scene(t_wrap *w);
+int			*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w);
+int			calc_ray(int n, t_rss rss, t_wrap *w);
 int		main(int ac, char **av);
 #endif

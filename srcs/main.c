@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/19 18:02:33 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/21 16:14:30 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,17 @@ void	start_mlx(t_mlx mlx, t_scene data)
 
 int calc_pixel_color(int *edge_color, int last[2], t_wrap *w)
 {
+	t_rss	rss;
+	int		*color;
 
-	return (0);
+	rss.limit = 3;
+	rss.xres = w->data.xres;
+	rss.yres = w->data.yres;
+	rss.x = w->x;
+	rss.y = w->y;
+	w->data.bgr = 0x353535;
+	color = sample_pixel(edge_color, last, rss, w); 
+	return (*color);
 }
 
 void	render_scene(t_wrap *w)
