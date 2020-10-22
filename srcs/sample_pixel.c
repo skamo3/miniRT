@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:08:10 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/21 20:38:14 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/22 17:47:55 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	*sample_center(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 		color[0] = edge_color[rss.x];
 		color[1] = edge_color[rss.x + 1];
 		color[2] = last[0];
-		color[3] = calc_ray(4, rss, w);
+		color[3] = calc_ray(8, rss, w);
 		last[0] = color[3];
 		edge_color[rss.x] = color[2];
 	}
@@ -85,7 +85,7 @@ static int	*sample_last(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 		color[0] = edge_color[rss.x];
 		color[1] = edge_color[rss.x + 1];
 		color[2] = last[0];
-		color[3] = calc_ray(3, rss, w);
+		color[3] = calc_ray(8, rss, w);
 		edge_color[rss.x] = color[2];
 		edge_color[rss.x + 1] = color[3];
 	}
