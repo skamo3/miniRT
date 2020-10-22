@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 19:19:59 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/22 20:31:12 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/22 20:39:05 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static t_p3	set_camera(int n, t_rss rss, t_mlx mlx)
 	p.x = (1 - 2 * ((rss.x + x_offset) / rss.xres)) * asp_ratio * correct_fov;
 	p.y = (1 - 2 * ((rss.y + y_offset) / rss.yres)) * correct_fov;
 	p.z = 1;
-	p = normalize(p);
 	return (p);
 }
 
