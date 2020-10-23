@@ -6,13 +6,13 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 01:09:49 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/18 18:33:56 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/23 18:31:51 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vec3.h"
 
-t_p3	scal_x_vec(t_p3 a, double t)
+t_p3	scal_x_vec(double t, t_p3 a)
 {
 	t_p3	v;
 

@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 19:19:59 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/22 20:39:05 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/23 17:51:39 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ int			calc_ray(int n, t_rss rss, t_wrap *w)
 	color = 0;
 	d = set_camera(n, rss, w->mlx);
 	d = look_at(d, w->mlx.cam->nv);
-	return (0);
+	color = trace_ray(w->mlx.cam->o, d, w, REFLECTION_LIMIT);
+	return (color);
 }
