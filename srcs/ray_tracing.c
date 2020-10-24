@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/23 18:33:52 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/24 20:49:28 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,26 @@ double		sphere_inter(t_p3 o, t_p3 d, t_fig *lst)
 		return (close);
 	ip1 = vadd(o, scal_x_vec(x[0], d));
 	ip2 = vadd(o, scal_x_vec(x[1], d));
-	return (0);
+	if (ip1.y >= lst->fig.sp.c.y && ip2.y >= lst->fig.sp.c.y)
+		return (x[0] < x[1] ? x[0] : x[1]);
+	else if (ip1.y >= lst->fig.sp.c.y)
+		return (x[0]);
+	else if (ip2.y >= lst->fig.sp.c.y)
+		return (x[1]);
+	return (INFINITY);
+}
+
+double		plane_inter(t_p3 o, t_p3 d, t_p3 plane_p, t_p3 plane_nv)
+{
+	double	x;
+	double	denom;
+
+	denom = vdot(plane_nv, d);
+	if (denom == 0)
+		return (INFINITY);
+	x = (vdot(plane_nv, vsubstract(plane_p, o))) / denom;
+	double a = vdot(plane_nv, vsubstract(plane_p, o));
+	return (x > 0 ? x : INFINITY);
 }
 
 void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
@@ -62,7 +81,7 @@ void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
 		if (lst->flag == SP)
 			distance = sphere_inter(ray.o, ray.d, lst);
 		else if (lst->flag == PL)
-			;
+			distance = plane_inter(ray.o, ray.d, lst->fig.pl.p, lst->normal);
 		else if (lst->flag == TR)
 			;
 		else if (lst->flag == SQ)
