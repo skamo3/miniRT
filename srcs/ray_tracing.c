@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/24 20:49:28 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/28 18:48:29 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,43 @@ double		plane_inter(t_p3 o, t_p3 d, t_p3 plane_p, t_p3 plane_nv)
 	if (denom == 0)
 		return (INFINITY);
 	x = (vdot(plane_nv, vsubstract(plane_p, o))) / denom;
-	double a = vdot(plane_nv, vsubstract(plane_p, o));
 	return (x > 0 ? x : INFINITY);
+}
+
+int			point_out(t_p3 p1, t_p3 p2, t_p3 p3, t_p3 ip)
+{
+	t_p3	v1;
+	t_p3	v2;
+	t_p3	vp;
+	
+	v1 = vsubstract(p2, p1);
+	v2 = vsubstract(p3, p1);
+	vp = vsubstract(ip, p1);
+	if (vdot(vcross(v1, v2), vcross(v1, vp)) < 0)
+		return (1);
+	return (0);
+}
+
+double		triangle_inter(t_p3 o, t_p3 d, t_fig *lst)
+{
+	double	id;
+	t_p3	ip;
+
+	id = plane_inter(o, d, lst->fig.tr.p1, lst->normal);
+	ip = vadd(o, scal_x_vec(id, d));
+	if (point_out(lst->fig.tr.p1, lst->fig.tr.p2, lst->fig.tr.p3, ip))
+		return (INFINITY);
+	if (point_out(lst->fig.tr.p2, lst->fig.tr.p3, lst->fig.tr.p1, ip))
+		return (INFINITY);
+	if (point_out(lst->fig.tr.p3, lst->fig.tr.p1, lst->fig.tr.p2, ip))
+		return (INFINITY);
+	return (id);
+}
+
+double		square_inter(t_p3 o, t_p3 d, t_fig *lst)
+{
+	t_p3	ip;
+
 }
 
 void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
@@ -83,9 +118,9 @@ void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
 		else if (lst->flag == PL)
 			distance = plane_inter(ray.o, ray.d, lst->fig.pl.p, lst->normal);
 		else if (lst->flag == TR)
-			;
+			distance = triangle_inter(ray.o, ray.d, lst);
 		else if (lst->flag == SQ)
-			;
+			distance = square_inter(ray.o, ray.d, lst);
 		else if (lst->flag == CY)
 			;
 		else if (lst->flag == CU)

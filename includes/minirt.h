@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/23 17:43:40 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/28 18:45:14 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,13 @@ typedef struct	s_inter
 	t_p3	normal;
 	t_p3	p;
 }				t_inter;
+
+typedef struct	s_sq_info
+{
+	t_p3	half_size;
+	t_p3	floor;
+	t_p3	center_to_ip;
+}				t_sq_info;
 
 void	error_check(int n, char *error_message);
 void	check_values(double n, double min, double max, char *err);
