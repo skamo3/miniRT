@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/23 17:38:12 by joockim          ###   ########.fr        #
+#    Updated: 2020/10/30 20:50:20 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,10 @@ SRCS = $(addprefix ./srcs/, \
 	   sample_pixel.c \
 	   camera_calc.c \
 	   ray_tracing.c \
+	   sphere.c \
+	   pl_sq_tr.c \
+	   cylinder.c \
+	   compound_inter.c \
 	   main.c)
 
 OBJS = ${SRCS:.c=.o}

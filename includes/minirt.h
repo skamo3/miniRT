@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/28 18:53:58 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/30 20:48:11 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,22 @@ typedef struct	s_sq_info
 	t_p3	center_to_ip;
 }				t_sq_info;
 
+typedef struct	s_cube
+{
+	t_fig	sq;
+	t_p3	center;
+	t_p3	normal[6];
+}				t_cube;
+
+typedef struct	s_pyr
+{
+	t_fig	sq;
+	t_fig	tr;
+	t_p3	vertex_point;
+	t_p3	normal[5];
+	t_p3	corner[4];
+}				t_pyr;
+
 void	error_check(int n, char *error_message);
 void	check_values(double n, double min, double max, char *err);
 void	comma(char **str);
@@ -174,5 +190,11 @@ int		calc_ray(int n, t_rss rss, t_wrap *w);
 void	try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter);
 int		trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth);
 double	sphere_inter(t_p3 o, t_p3 d, t_fig *lst);
+double	plane_inter(t_p3 o, t_p3 d, t_p3 plane_p, t_p3 plane_nv);
+double	triangle_inter(t_p3 o, t_p3 d, t_fig *lst);
+double	square_inter(t_p3 o, t_p3 d, t_fig *lst);
+double	cylinder_inter(t_p3 o, t_p3 d, t_fig *lst);
+double	cube_inter(t_p3 o, t_p3 d, t_fig *lst);
+double	pyramid_inter(t_p3 o, t_p3 d, t_fig *lst);
 int		main(int ac, char **av);
 #endif
