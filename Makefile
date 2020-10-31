@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/10/30 20:50:20 by joockim          ###   ########.fr        #
+#    Updated: 2020/11/01 01:26:44 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ ${NAME} : ${OBJS}
 	make -C ${UTILS}libftprintf
 	make -C ${UTILS}vec
 	${CC} ${FLAGS} ${OBJS} -o ${NAME}
-	./RT ./scenes/everything.rt > test
+	./RT ./scenes/sphere.rt > test
 
 all : ${NAME}
 

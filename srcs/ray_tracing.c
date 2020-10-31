@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/01 01:19:34 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/01 01:31:09 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,13 @@ int			is_light(t_p3 o, t_p3 d, t_fig *lst)
 
 t_p3		reflect_ray(t_p3 ray, t_p3 normal)
 {
+	double a;
+	a = vdot(normal, ray);
+	if (a > EPSILON && a < INFINITY)
+	{
+		printf("a : %f\n", a);
+		printf("2 * %f\n", 2 * a);
+	}
 	return (vsubstract(scal_x_vec(2 * vdot(normal, ray), normal), ray));
 }
 
@@ -156,6 +163,7 @@ void		compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
 			light = data.l->br * vcos(inter->normal, direction);
 			add_coefficient(&rgb, light, data.l->color);
 		}
+		ray.o = ray.o;
 		if (lst->specular)
 		{
 			light = calc_specular(ray, inter, data, lst);
