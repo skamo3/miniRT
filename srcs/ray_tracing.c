@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/30 20:49:03 by joockim          ###   ########.fr       */
+/*   Updated: 2020/10/31 19:17:47 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,79 @@ void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
 	}
 }
 
+void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst)
+{
+	if (lst->flag == SP)
+	{
+		inter->normal = normalize(vsubstract(inter->p, lst->fig.sp.c));
+		if (vcos(d, inter->normal) > 0)
+		{
+			inter->normal = scal_x_vec(-1, inter->normal);
+			lst->fig.sp.inside = 1;
+		}
+		else
+			lst->fig.sp.inside = 0;
+	}
+	else
+		inter->normal = vcos(d, lst->normal) > 0 ? scal_x_vec(-1, lst->normal)
+			: lst->normal;
+}
+
+void		add_coefficient(double (*rgb)[3], double coef, int color)
+{
+	unsigned int	mask;
+
+	mask = 255 << 16;
+	(*rgb)[0] += coef * ((color & mask) >> 16) / 255;
+	mask >>= 8;
+	(*rgb)[1] += coef * ((color & mask) >> 8) / 255;
+	mask >>= 8;
+	(*rgb)[2] += coef * (color & mask) / 255;
+}
+
+int			is_light(t_p3 o, t_p3 d, t_fig *lst)
+{
+	double	in;
+
+	while (lst)
+	{
+		if (lst->flag == SP)
+			in = sphere_inter(o, d, lst);
+		else if (lst->flag == PL)
+			in = plane_inter(ray.o, ray.d, lst->fig.pl.p, lst->normal);
+		else if (lst->flag == TR)
+			in = triangle_inter(ray.o, ray.d, lst);
+		else if (lst->flag == SQ)
+			in = square_inter(ray.o, ray.d, lst);
+		else if (lst->flag == CY)
+			in = cylinder_inter(ray.o, ray.d, lst);
+		else if (lst->flag == CU)
+			in = cube_inter(ray.o, ray.d, lst);
+		else if (lst->flag == PY)
+			in = pyramid_inter(ray.o, ray.d, lst);
+		if (in > EPSILON && in < 1)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
+
+void		compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
+{
+	double	light;
+	double	rgb[3];
+	t_p3	direction;
+
+	light = 0.0;
+	ft_memset(rgb, 0, 3 * sizeof(double));
+	add_coefficient(&rgb, data.ambient_light, data.al_color);
+	while (data.l)
+	{
+		direction = vsubstract(data.l->o, inter->p);
+		if 
+	}
+}
+
 int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
 {
 	t_v3	ray;
@@ -55,8 +128,10 @@ int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
 	close_fig.flag = -1;
 	try_all_inter(ray, w->lst, &close_fig, &close_inter);
 	inter.p = vadd(o, scal_x_vec(close_inter, d));
-
+	calc_normal(&inter, d, w->lst);
+	inter.color = close_fig.flag != -1 ? close_fig.color : w->data.bgr;
+	compute_light(ray, &inter, w->data, w->lst);
 	depth = 0;
 	r = 0;
-	return (0);
+	return (inter.color);
 }
