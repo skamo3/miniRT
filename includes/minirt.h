@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/30 20:48:11 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/01 08:18:41 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,5 +196,11 @@ double	square_inter(t_p3 o, t_p3 d, t_fig *lst);
 double	cylinder_inter(t_p3 o, t_p3 d, t_fig *lst);
 double	cube_inter(t_p3 o, t_p3 d, t_fig *lst);
 double	pyramid_inter(t_p3 o, t_p3 d, t_fig *lst);
+t_p3	reflect_ray(t_p3 ray, t_p3 normal);
+double	calc_specular(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst);
+void	add_coefficient(double (*rgb)[3], double coef, int color);
+int		is_light(t_p3 o, t_p3 d, t_fig *lst);
+void	compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst);
+int		color_x_light(int color, double rgb[3]);
 int		main(int ac, char **av);
 #endif

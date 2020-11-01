@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/01 01:31:09 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/01 09:01:09 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,119 +59,81 @@ void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst)
 			: lst->normal;
 }
 
-void		add_coefficient(double (*rgb)[3], double coef, int color)
+static t_p3	sinwave(t_inter *inter, t_fig *lst)
 {
-	unsigned int	mask;
+	double	sinn;
+	double	scal;
 
-	mask = 255 << 16;
-	(*rgb)[0] += coef * ((color & mask) >> 16) / 255;
-	mask >>= 8;
-	(*rgb)[1] += coef * ((color & mask) >> 8) / 255;
-	mask >>= 8;
-	(*rgb)[2] += coef * (color & mask) / 255;
+	scal = lst->wavelength;
+	sinn = sin(inter->p.z * scal) + sin(inter->p.y * scal);
+	return (x_axis_rotation(inter->normal, sinn));
 }
 
-int			is_light(t_p3 o, t_p3 d, t_fig *lst)
+static int	checkerboard(t_inter *inter)
 {
-	double	in;
+	int		black;
+	int		white;
+	t_p3	coords;
+	t_p3	val;
+	int		party_mix;
 
-	while (lst)
-	{
-		if (lst->flag == SP)
-			in = sphere_inter(o, d, lst);
-		else if (lst->flag == PL)
-			in = plane_inter(o, d, lst->fig.pl.p, lst->normal);
-		else if (lst->flag == TR)
-			in = triangle_inter(o, d, lst);
-		else if (lst->flag == SQ)
-			in = square_inter(o, d, lst);
-		else if (lst->flag == CY)
-			in = cylinder_inter(o, d, lst);
-		else if (lst->flag == CU)
-			in = cube_inter(o, d, lst);
-		else if (lst->flag == PY)
-			in = pyramid_inter(o, d, lst);
-		if (in > EPSILON && in < 1)
-			return (0);
-		lst = lst->next;
-	}
-	return (1);
+	party_mix = 0;
+	black = 0x000000;
+	white = 0xffffff;
+	coords.x = abs((int)floor(inter->p.x));
+	coords.y = abs((int)floor(inter->p.y));
+	coords.z = abs((int)floor(inter->p.z));
+	val.x = (int)coords.x % 2;
+	val.y = (int)coords.y % 2;
+	val.z = (int)coords.z % 2;
+	if (fabs(inter->normal.x) > 0)
+		party_mix = (int)val.y ^ (int)val.z;
+	else if (fabs(inter->normal.y) > 0)
+		party_mix = (int)val.x ^ (int)val.y;
+	return (party_mix ? black : white);
 }
 
-t_p3		reflect_ray(t_p3 ray, t_p3 normal)
+static void	define_color(double r, double g, double b, double color[3])
 {
-	double a;
-	a = vdot(normal, ray);
-	if (a > EPSILON && a < INFINITY)
-	{
-		printf("a : %f\n", a);
-		printf("2 * %f\n", 2 * a);
-	}
-	return (vsubstract(scal_x_vec(2 * vdot(normal, ray), normal), ray));
+	color[0] = r;
+	color[1] = g;
+	color[2] = b;
 }
 
-double		calc_specular(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
+int			rainbow(t_inter *inter)
 {
-	double	light;
-	t_p3	direction;
-	t_p3	p_to_cam;
-	t_p3	reflected;
+	double	color[3];
+	double	w;
 
-	direction = vsubstract(data.l->o, inter->p);
-	p_to_cam = vsubstract(ray.o, inter->p);
-	reflected = reflect_ray(direction, inter->normal);
-	if (vdot(reflected, p_to_cam) > 0)
-		light = data.l->br * pow(vcos(reflected, p_to_cam), lst->specular);
+	w = 540 - (inter->normal.y * 160);
+	if (w >= 380 && w < 440)
+		define_color(-(w - 440) / (440. - 380.), 0.0, 1.0, color);
+	else if (w >= 440 && w < 490)
+		define_color(0.0, (w - 440.) / (490. - 440.), 1.0, color);
+	else if (w >= 490 && w < 510)
+		define_color(0.0, 1.0, -(w - 510.) / (510. - 490.), color);
+	else if (w >= 510 && w < 540)
+		define_color((w - 510.) / (540. - 510.), 1.0, 0.0, color);
+	else if (w >= 540 && w < 645)
+		define_color(1.0, -(w - 645.) / (645. - 540.), 0.0, color);
+	else if (w >= 645 && w < 700)
+		define_color(1.0, 0.0, 0.0, color);
 	else
-		light = 0;
-	return (light);
+		define_color(0.0, 0.0, 0.0, color);
+	color[0] *= 255;
+	color[1] *= 255;
+	color[2] *= 255;
+	return (((int)color[0] << 16) | ((int)color[1] << 8) | (int)color[2]);
 }
 
-int			color_x_light(int color, double rgb[3])
+void		apply_texture(int texture, t_inter *inter, t_fig *lst)
 {
-	unsigned int	mask;
-	unsigned int	r;
-	unsigned int	g;
-	unsigned int	b;
-
-	mask = 255 << 16;
-	r = rgb[0] * ((color & mask) >> 16);
-	mask >>= 8;
-	g = rgb[1] * ((color & mask) >> 8);
-	mask >>= 8;
-	b = rgb[2] * (color & mask);
-	r = r > 255 ? 255 : r;
-	g = g > 255 ? 255 : g;
-	b = b > 255 ? 255 : b;
-	return ((r << 16) | (g << 8) | b);
-}
-
-void		compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
-{
-	double	light;
-	double	rgb[3];
-	t_p3	direction;
-
-	light = 0.0;
-	ft_memset(rgb, 0, 3 * sizeof(double));
-	add_coefficient(&rgb, data.ambient_light, data.al_color);
-	while (data.l)
-	{
-		direction = vsubstract(data.l->o, inter->p);
-		if (is_light(inter->p, direction, lst) && vdot(inter->normal, direction) > 0)
-		{
-			light = data.l->br * vcos(inter->normal, direction);
-			add_coefficient(&rgb, light, data.l->color);
-		}
-		ray.o = ray.o;
-		if (lst->specular)
-		{
-			light = calc_specular(ray, inter, data, lst);
-			add_coefficient(&rgb, light, data.l->color);
-		}
-		data.l = data.l->next;
-	}
-	inter->color = color_x_light(inter->color, rgb);
+	if (texture == 1)
+		inter->color = checkerboard(inter);
+	else if (texture == 2)
+		inter->normal = sinwave(inter, lst);
+	else if (texture == 3)
+		inter->color = rainbow(inter);
 }
 
 int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
@@ -190,6 +152,7 @@ int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
 	inter.p = vadd(o, scal_x_vec(close_inter, d));
 	calc_normal(&inter, d, w->lst);
 	inter.color = close_fig.flag != -1 ? close_fig.color : w->data.bgr;
+	apply_texture(close_fig.texture, &inter, w->lst);
 	compute_light(ray, &inter, w->data, w->lst);
 	depth = 0;
 	r = 0;
