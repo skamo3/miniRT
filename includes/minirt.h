@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 01:30:14 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/04 04:29:26 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define WIN_SIZE_X 2560
 # define WIN_SIZE_Y 1440
 
-# define THREAD_NUM 12
+# define THREAD_NUM 4
 
 # define EPSILON 0.00001
 
