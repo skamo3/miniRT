@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/01 08:18:41 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/03 23:50:01 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@
 # define CU 5
 # define PY 6
 
-# define WIN_SIZE_X 1920
-# define WIN_SIZE_Y 1080
+# define WIN_SIZE_X 2560
+# define WIN_SIZE_Y 1440
 
-# define THREAD_NUM 1
+# define THREAD_NUM 12
 
 # define EPSILON 0.00001
 
@@ -202,5 +202,6 @@ void	add_coefficient(double (*rgb)[3], double coef, int color);
 int		is_light(t_p3 o, t_p3 d, t_fig *lst);
 void	compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst);
 int		color_x_light(int color, double rgb[3]);
+void	apply_texture(int texture, t_inter *inter, t_fig *lst);
 int		main(int ac, char **av);
 #endif

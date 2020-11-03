@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/11/01 08:18:21 by joockim          ###   ########.fr        #
+#    Updated: 2020/11/03 20:51:20 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS = $(addprefix ./srcs/, \
 	   compound_inter.c \
 	   light_calc.c \
 	   color_calc.c \
+	   texture.c \
 	   main.c)
 
 OBJS = ${SRCS:.c=.o}
@@ -54,7 +55,7 @@ ${NAME} : ${OBJS}
 	make -C ${UTILS}libftprintf
 	make -C ${UTILS}vec
 	${CC} ${FLAGS} ${OBJS} -o ${NAME}
-	./RT ./scenes/sphere.rt > test
+	./RT ./scenes/reflection.rt  > test
 
 all : ${NAME}
 
