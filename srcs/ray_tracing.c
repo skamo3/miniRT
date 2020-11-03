@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/03 23:51:33 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/04 01:30:29 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
 	close_fig.refr_idx = close_fig.flag != -1 ? close_fig.refr_idx : 0;
 	if (close_fig.refr_idx > 0)
 		inter.color = trace_ray(inter.p, refract_ray(d, inter.normal, &close_fig), w, depth);
-	depth = 0;
-	return (inter.color);
+	if (r > 0 && depth > 0)
+		inter.ref_color = trace_ray(inter.p, reflect_ray(scal_x_vec(-1, d), inter.normal), w, depth - 1);
+	return (cadd(cproduct(inter.color, 1 - r), cproduct(inter.ref_color, r)));
 }
