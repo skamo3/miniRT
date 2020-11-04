@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/05 00:14:08 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 04:54:41 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ int	main(int ac, char **av)
 	init_mlx(&mlx, &data);
 	wrap_data(mlx, data, lst, wrapper);
 	multithreading(wrapper);
-	if (ac == 3)
+//	if (ac == 3)
+//		make_bmp(mlx, data, av[1]);
 	start_mlx(mlx, data);
 	return (0);
 }

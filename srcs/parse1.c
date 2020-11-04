@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:40 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 19:11:41 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 05:20:49 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 	data->res_init = 0;
 	data->al_init = 0;
 	if ((fd = open(av[1], 0)) == -1)
-		exit(1);
+		error_check(7, "rt file can not open");
 	while (get_next_line(fd, &str))
 		parsing(mlx, data, lst, str);
 	if (data->res_init == 0 || data->al_init == 0 || mlx->cam == NULL)

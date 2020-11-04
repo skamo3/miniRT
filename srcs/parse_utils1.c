@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 19:21:01 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 19:29:02 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 06:12:16 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,6 @@ int		parse_color(char **str)
 	b |= rt_atoi(str);
 	check_values(b, 0, 255, "color");
 	return (r | g | b);
-}
-
-void	*err_malloc(unsigned int n)
-{
-	void	*ptr;
-
-	ptr = malloc(n);
-	if (ptr == NULL)
-		error_check(5, "Fail to alloc memory");
-	return (ptr);
 }
 
 t_p3	parse_p3(char **str)
