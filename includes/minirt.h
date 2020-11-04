@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 23:14:02 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 00:03:28 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@
 # define WIN_SIZE_X 2560
 # define WIN_SIZE_Y 1440
 
-# define THREAD_NUM 4
-
+# define THREAD_NUM 6
 # define EPSILON 0.00001
 
 # define REFLECTION_LIMIT 3
@@ -207,6 +206,9 @@ int		cproduct(int color, double coef);
 int		cadd(int color_a, int color_b);
 void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst);
 t_p3	refract_ray(t_p3 d, t_p3 normal, t_fig *lst);
+int		average(int color1, int color2);
+int		average_supersampled_color(int *color);
+int		color_difference(int color, int color2);
 int		supersample(int *color, t_rss rss, t_wrap *w);
 int		main(int ac, char **av);
 #endif

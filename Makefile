@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/11/04 20:12:22 by joockim          ###   ########.fr        #
+#    Updated: 2020/11/04 23:31:24 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,8 @@ SRCS = $(addprefix ./srcs/, \
 	   light_calc.c \
 	   color_calc.c \
 	   texture.c \
+	   supersample.c \
+	   supersample_utils.c \
 	   minirt.c)
 
 OBJS = ${SRCS:.c=.o}

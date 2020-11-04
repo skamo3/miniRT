@@ -6,11 +6,31 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 08:17:17 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 01:20:45 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/04 23:42:48 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
+
+int	color_difference(int color1, int color2)
+{
+	int	mask;
+	int	r[2];
+	int	g[2];
+	int	b[2];
+	int	distance_exp2;
+
+	mask = 255;
+	r[0] = (color1 & (mask << 16)) >> 16;
+	g[0] = (color1 & (mask << 8)) >> 8;
+	b[0] = color1 & mask;
+	r[1] = (color2 & (mask << 16)) >> 16;
+	g[1] = (color2 & (mask << 8)) >> 8;
+	b[1] = color2 & mask;
+	distance_exp2 =
+		pow((r[1] - r[0]), 2) + pow((g[1] - g[0]), 2) + pow((b[1] - b[0]), 2);
+	return (distance_exp2 > 1000);
+}
 
 int	color_x_light(int color, double rgb[3])
 {

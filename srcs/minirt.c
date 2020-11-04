@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 23:21:57 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 00:14:08 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,182 +57,6 @@ void	start_mlx(t_mlx mlx, t_scene data)
 	mlx_hook(mlx.win_ptr, KEY_PRESS, 0, key_press, &mlx);
 	mlx_hook(mlx.win_ptr, PRESS_RED_BUTTON, 0, close_red_button, 0); 
 	mlx_loop(mlx.mlx_ptr);
-}
-
-int	color_difference(int color1, int color2)
-{
-	int	mask;
-	int	r[2];
-	int	g[2];
-	int	b[2];
-	int	distance_exp2;
-
-	mask = 255;
-	r[0] = (color1 & (mask << 16)) >> 16;
-	g[0] = (color1 & (mask << 8)) >> 8;
-	b[0] = color1 & mask;
-	r[1] = (color2 & (mask << 16)) >> 16;
-	g[1] = (color2 & (mask << 8)) >> 8;
-	b[1] = color2 & mask;
-	distance_exp2 = 
-		pow((r[1] - r[0]), 2) + pow((g[1] - g[0]), 2) + pow((b[1] - b[0]), 2);
-	return (distance_exp2 > 1000);
-}
-
-int	average(int color1, int color2)
-{
-	int	average[3];
-	int	mask;
-	int	color[2];
-	int	i;
-
-	mask = 255;
-	ft_memset(average, 0, 3 * sizeof(int));
-	color[0] = color1;
-	color[1] = color2;
-	i = 0;
-	while (i < 2)
-	{
-		average[0] += (color[i] & (mask << 16)) >> 16;
-		average[1] += (color[i] & (mask << 8)) >> 8;
-		average[2] += color[i] & mask;
-		i++;
-	}
-	average[0] = average[0] / 2;
-	average[1] = average[1] / 2;
-	average[2] = average[2] / 2;
-	return ((average[0] << 16) | (average[1] << 8) | average[2]);
-}
-
-int	average_supersampled_color(int *color)
-{
-	int	ss_color[3];
-	int	mask;
-	int	n;
-
-	ft_memset(ss_color, 0, sizeof(int) * 3);
-	mask = 255;
-	n = 0;
-	while (n < 4)
-	{
-		ss_color[0] += (color[n] & (mask << 16)) >> 16;
-		ss_color[1] += (color[n] & (mask << 8)) >> 8;
-		ss_color[2] += color[n] & mask;
-		n++;
-	}
-	ss_color[0] = ss_color[0] / 4;
-	ss_color[1] = ss_color[1] / 4;
-	ss_color[2] = ss_color[2] / 4;
-	free(color);
-	return ((ss_color[0] << 16) | (ss_color[1] << 8) | ss_color[2]);
-}
-
-static int	supersample_first(int *color, int center, t_rss rss, t_wrap *w)
-{
-	t_rss	tmp;
-	int		*subsquare;
-	int		col;
-
-	subsquare = (int *)err_malloc(sizeof(int) * 4);
-	subsquare[0] = color[0];
-	subsquare[1] = calc_ray(1, rss, w);
-	subsquare[2] = calc_ray(3, rss, w);
-	subsquare[3] = center;
-	tmp.limit = rss.limit - 1;
-	tmp.x = rss.x * 2;
-	tmp.y = rss.y * 2;
-	tmp.xres = rss.xres * 2;
-	tmp.yres = rss.yres * 2;
-	col = supersample(subsquare, tmp, w);
-	return (col);
-}
-
-static int	supersample_second(int *color, int center, t_rss rss, t_wrap *w)
-{
-	t_rss	tmp;
-	int		*subsquare;
-	int		col;
-
-	subsquare = (int *)err_malloc(sizeof(int) * 4);
-	subsquare[0] = calc_ray(1, rss, w);
-	subsquare[1] = color[1];
-	subsquare[2] = center;
-	subsquare[3] = calc_ray(5, rss, w);
-	tmp.limit = rss.limit - 1;
-	tmp.x = rss.x * 2 + 1;
-	tmp.y = rss.y * 2;
-	tmp.xres = rss.xres * 2;
-	tmp.yres = rss.yres * 2;
-	col = supersample(subsquare, tmp, w);
-	return (col);
-}
-
-
-static int	supersample_third(int *color, int center, t_rss rss, t_wrap *w)
-{
-	t_rss	tmp;
-	int		*subsquare;
-	int		col;
-
-	subsquare = (int *)err_malloc(sizeof(int) * 4);
-	subsquare[0] = calc_ray(3, rss, w);
-	subsquare[1] = center;
-	subsquare[2] = color[2];
-	subsquare[3] = calc_ray(3, rss, w);
-	tmp.limit = rss.limit - 1;
-	tmp.x = rss.x * 2;
-	tmp.y = rss.y * 2 + 1;
-	tmp.xres = rss.xres * 2;
-	tmp.yres = rss.yres * 2;
-	col = supersample(subsquare, tmp, w);
-	return (col);
-}
-
-static int	supersample_fourth(int *color, int center, t_rss rss, t_wrap *w)
-{
-	t_rss	tmp;
-	int		*subsquare;
-	int		col;
-
-	subsquare = (int *)err_malloc(sizeof(int) * 4);
-	subsquare[0] = center;
-	subsquare[1] = calc_ray(5, rss, w);
-	subsquare[2] = calc_ray(7, rss, w);
-	subsquare[3] = color[3];
-	tmp.limit = rss.limit - 1;
-	tmp.x = rss.x * 2 + 1;
-	tmp.y = rss.y * 2 + 1;
-	tmp.xres = rss.xres * 2;
-	tmp.yres = rss.yres * 2;
-	col = supersample(subsquare, tmp, w);
-	return (col);
-}
-
-int	supersample(int *color, t_rss rss, t_wrap *w)
-{
-	int	center;
-	int	n;
-
-	center = calc_ray(4, rss, w);
-	n = 0;
-	while (n < 4)
-	{
-		if (!color_difference(color[n], center) || rss.limit == 0)
-			color[n] = average(color[n], center);
-		else
-		{
-			if (n == 0)
-				color[0] = supersample_first(color, center, rss, w);
-			else if (n == 1)
-				color[1] = supersample_second(color, center, rss, w);
-			else if (n == 2)
-				color[2] = supersample_third(color, center, rss, w);
-			else if (n == 3)
-				color[3] = supersample_fourth(color, center, rss, w);
-		}
-		n++;
-	}
-	return (average_supersampled_color(color));
 }
 
 int calc_pixel_color(int *edge_color, int last[2], t_wrap *w)
@@ -299,7 +123,7 @@ int	main(int ac, char **av)
 	init_mlx(&mlx, &data);
 	wrap_data(mlx, data, lst, wrapper);
 	multithreading(wrapper);
-
+	if (ac == 3)
 	start_mlx(mlx, data);
 	return (0);
 }
