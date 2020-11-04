@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 04:29:26 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/04 23:14:02 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,5 +207,6 @@ int		cproduct(int color, double coef);
 int		cadd(int color_a, int color_b);
 void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst);
 t_p3	refract_ray(t_p3 d, t_p3 normal, t_fig *lst);
+int		supersample(int *color, t_rss rss, t_wrap *w);
 int		main(int ac, char **av);
 #endif

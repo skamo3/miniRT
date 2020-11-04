@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:01:56 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 05:50:14 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/04 23:21:57 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,30 @@ int	average(int color1, int color2)
 	return ((average[0] << 16) | (average[1] << 8) | average[2]);
 }
 
-static int	supersample_first(int color, int center, t_rss rss, t_wrap *w)
+int	average_supersampled_color(int *color)
+{
+	int	ss_color[3];
+	int	mask;
+	int	n;
+
+	ft_memset(ss_color, 0, sizeof(int) * 3);
+	mask = 255;
+	n = 0;
+	while (n < 4)
+	{
+		ss_color[0] += (color[n] & (mask << 16)) >> 16;
+		ss_color[1] += (color[n] & (mask << 8)) >> 8;
+		ss_color[2] += color[n] & mask;
+		n++;
+	}
+	ss_color[0] = ss_color[0] / 4;
+	ss_color[1] = ss_color[1] / 4;
+	ss_color[2] = ss_color[2] / 4;
+	free(color);
+	return ((ss_color[0] << 16) | (ss_color[1] << 8) | ss_color[2]);
+}
+
+static int	supersample_first(int *color, int center, t_rss rss, t_wrap *w)
 {
 	t_rss	tmp;
 	int		*subsquare;
@@ -117,7 +140,68 @@ static int	supersample_first(int color, int center, t_rss rss, t_wrap *w)
 	subsquare[3] = center;
 	tmp.limit = rss.limit - 1;
 	tmp.x = rss.x * 2;
-	tmp.y = rxx.y * 2;
+	tmp.y = rss.y * 2;
+	tmp.xres = rss.xres * 2;
+	tmp.yres = rss.yres * 2;
+	col = supersample(subsquare, tmp, w);
+	return (col);
+}
+
+static int	supersample_second(int *color, int center, t_rss rss, t_wrap *w)
+{
+	t_rss	tmp;
+	int		*subsquare;
+	int		col;
+
+	subsquare = (int *)err_malloc(sizeof(int) * 4);
+	subsquare[0] = calc_ray(1, rss, w);
+	subsquare[1] = color[1];
+	subsquare[2] = center;
+	subsquare[3] = calc_ray(5, rss, w);
+	tmp.limit = rss.limit - 1;
+	tmp.x = rss.x * 2 + 1;
+	tmp.y = rss.y * 2;
+	tmp.xres = rss.xres * 2;
+	tmp.yres = rss.yres * 2;
+	col = supersample(subsquare, tmp, w);
+	return (col);
+}
+
+
+static int	supersample_third(int *color, int center, t_rss rss, t_wrap *w)
+{
+	t_rss	tmp;
+	int		*subsquare;
+	int		col;
+
+	subsquare = (int *)err_malloc(sizeof(int) * 4);
+	subsquare[0] = calc_ray(3, rss, w);
+	subsquare[1] = center;
+	subsquare[2] = color[2];
+	subsquare[3] = calc_ray(3, rss, w);
+	tmp.limit = rss.limit - 1;
+	tmp.x = rss.x * 2;
+	tmp.y = rss.y * 2 + 1;
+	tmp.xres = rss.xres * 2;
+	tmp.yres = rss.yres * 2;
+	col = supersample(subsquare, tmp, w);
+	return (col);
+}
+
+static int	supersample_fourth(int *color, int center, t_rss rss, t_wrap *w)
+{
+	t_rss	tmp;
+	int		*subsquare;
+	int		col;
+
+	subsquare = (int *)err_malloc(sizeof(int) * 4);
+	subsquare[0] = center;
+	subsquare[1] = calc_ray(5, rss, w);
+	subsquare[2] = calc_ray(7, rss, w);
+	subsquare[3] = color[3];
+	tmp.limit = rss.limit - 1;
+	tmp.x = rss.x * 2 + 1;
+	tmp.y = rss.y * 2 + 1;
 	tmp.xres = rss.xres * 2;
 	tmp.yres = rss.yres * 2;
 	col = supersample(subsquare, tmp, w);
@@ -166,7 +250,7 @@ int calc_pixel_color(int *edge_color, int last[2], t_wrap *w)
 	if (color_difference(color[0], color[3])
 			|| color_difference(color[1], color[2]))
 		return (supersample(color, rss, w));
-	return (*color);
+	return (average_supersampled_color(color));
 }
 
 void	render_scene(t_wrap *w)
