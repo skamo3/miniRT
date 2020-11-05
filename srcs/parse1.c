@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:40 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/05 05:20:49 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/05 23:00:03 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av)
 	if (data->res_init == 0 || data->al_init == 0 || mlx->cam == NULL)
 		error_check(4, "Not enough elements in rt file to render a scene");
 	free(str);
-	str = 0;
+	close(fd);
 }

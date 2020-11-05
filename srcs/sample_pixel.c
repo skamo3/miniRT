@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:08:10 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/22 17:47:55 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 05:18:30 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	*sample_last(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 	return (color);
 }
 
-int		*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w)
+int			*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 {
 	int	*color;
 
@@ -103,5 +103,4 @@ int		*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 	else
 		color = sample_center(edge_color, last, rss, w);
 	return (color);
-
 }

@@ -6,13 +6,14 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 17:13:43 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 04:06:35 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 05:22:13 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
+void		try_all_inter(t_v3 ray, t_fig *lst,
+		t_fig *close_fig, double *close_inter)
 {
 	double	distance;
 
@@ -41,7 +42,7 @@ void		try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter)
 	}
 }
 
-void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst)
+void		calc_normal(t_inter *inter, t_p3 d, t_fig *lst)
 {
 	if (lst->flag == SP)
 	{
@@ -79,7 +80,7 @@ t_p3		refract_ray(t_p3 d, t_p3 normal, t_fig *lst)
 	eta = etai / etat;
 	k = 1 - eta * eta * (1 - cosi * cosi);
 	return (k < 0 ? reflect_ray(scal_x_vec(-1, d), normal) :
-			vadd(scal_x_vec(eta, d), scal_x_vec(eta - (sqrt(k) / cosi), normal)));
+		vadd(scal_x_vec(eta, d), scal_x_vec(eta - (sqrt(k) / cosi), normal)));
 }
 
 int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
@@ -103,8 +104,10 @@ int			trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth)
 	r = close_fig.flag != -1 ? close_fig.refl_idx : 0;
 	close_fig.refr_idx = close_fig.flag != -1 ? close_fig.refr_idx : 0;
 	if (close_fig.refr_idx > 0)
-		inter.color = trace_ray(inter.p, refract_ray(d, inter.normal, &close_fig), w, depth);
+		inter.color = trace_ray(inter.p,
+				refract_ray(d, inter.normal, &close_fig), w, depth);
 	if (r > 0 && depth > 0)
-		inter.ref_color = trace_ray(inter.p, reflect_ray(scal_x_vec(-1, d), inter.normal), w, depth - 1);
+		inter.ref_color = trace_ray(inter.p,
+				reflect_ray(scal_x_vec(-1, d), inter.normal), w, depth - 1);
 	return (cadd(cproduct(inter.color, 1 - r), cproduct(inter.ref_color, r)));
 }

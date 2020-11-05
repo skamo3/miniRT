@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 01:59:33 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/03 19:56:20 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 06:16:33 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ t_p3	x_axis_rotation(t_p3 v, double angle)
 	double	rad_angle;
 
 	rad_angle = angle * M_PI / 180;
-	row1 = (t_p3){1, 0, 0};
-	row2 = (t_p3){0, cos(rad_angle), -sin(rad_angle)};
-	row3 = (t_p3){0, sin(rad_angle), cos(rad_angle)};
+	row1 = vdefine(1, 0, 0);
+	row2 = vdefine(0, cos(rad_angle), -sin(rad_angle));
+	row3 = vdefine(0, sin(rad_angle), cos(rad_angle));
 	rotated.x = v.x * row1.x + v.y * row1.y + v.z * row1.z;
 	rotated.y = v.x * row2.x + v.y * row2.y + v.z * row2.z;
 	rotated.z = v.x * row3.x + v.y * row3.y + v.z * row3.z;
@@ -47,9 +47,9 @@ t_p3	y_axis_rotation(t_p3 v, double angle)
 	double	rad_angle;
 
 	rad_angle = angle * M_PI / 180;
-	row1 = (t_p3){cos(rad_angle), 0, sin(rad_angle)};
-	row2 = (t_p3){0, 1, 0};
-	row3 = (t_p3){-sin(rad_angle), 0, cos(rad_angle)};
+	row1 = vdefine(cos(rad_angle), 0, sin(rad_angle));
+	row2 = vdefine(0, 1, 0);
+	row3 = vdefine(-sin(rad_angle), 0, cos(rad_angle));
 	rotated.x = v.x * row1.x + v.y * row1.y + v.z * row1.z;
 	rotated.y = v.x * row2.x + v.y * row2.y + v.z * row2.z;
 	rotated.z = v.x * row3.x + v.y * row3.y + v.z * row3.z;
@@ -65,9 +65,9 @@ t_p3	z_axis_rotation(t_p3 v, double angle)
 	double	rad_angle;
 
 	rad_angle = angle * M_PI / 180;
-	row1 = (t_p3){cos(rad_angle), -sin(rad_angle), 0};
-	row2 = (t_p3){sin(rad_angle), cos(rad_angle), 0};
-	row3 = (t_p3){0, 0, 1};
+	row1 = vdefine(cos(rad_angle), -sin(rad_angle), 0);
+	row2 = vdefine(sin(rad_angle), cos(rad_angle), 0);
+	row3 = vdefine(0, 0, 1);
 	rotated.x = v.x * row1.x + v.y * row1.y + v.z * row1.z;
 	rotated.y = v.x * row2.x + v.y * row2.y + v.z * row2.z;
 	rotated.z = v.x * row3.x + v.y * row3.y + v.z * row3.z;

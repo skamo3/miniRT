@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 19:02:54 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/05 06:12:10 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 03:53:15 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,23 @@ void	error_check(int n, char *error_message)
 	if (n == 7)
 		ft_printf("Open error : %s\n", error_message);
 	exit(1);
+}
+
+void	success_message(int ac)
+{
+	if (ac == 2)
+	{
+		ft_printf("\nminiRT make Scene successfully rendered with ");
+		ft_printf("%d thread\n", THREAD_NUM);
+		ft_printf("press ESC or click RED BUTTON to close program\n");
+		ft_printf("press space to change another camera\n\n");
+	}
+	else
+	{
+		ft_printf("\nScene successfully saved to BMP file\n");
+		ft_printf("You can check your file in \"images\" directory\n\n");
+		exit(0);
+	}
 }
 
 void	check_values(double n, double min, double max, char *err)

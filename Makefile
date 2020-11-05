@@ -6,7 +6,7 @@
 #    By: joockim <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/11 00:08:51 by joockim           #+#    #+#              #
-#    Updated: 2020/11/04 23:31:24 by joockim          ###   ########.fr        #
+#    Updated: 2020/11/06 03:55:46 by joockim          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,9 @@ SRCS = $(addprefix ./srcs/, \
 	   texture.c \
 	   supersample.c \
 	   supersample_utils.c \
+	   make_bmpfile.c \
+	   make_bmpfile_utils.c \
+	   mlx_func1.c \
 	   minirt.c)
 
 OBJS = ${SRCS:.c=.o}
@@ -57,7 +60,7 @@ ${NAME} : ${OBJS}
 	make -C ${UTILS}libftprintf
 	make -C ${UTILS}vec
 	${CC} ${FLAGS} ${OBJS} -o ${NAME}
-	./RT ./scenes/reflection.rt  > test
+	./RT ./scenes/sphere.rt
 
 all : ${NAME}
 

@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/05 00:03:28 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 06:42:18 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ typedef struct	s_fig
 	struct s_fig	*next;
 }				t_fig;
 
-typedef struct		s_light
+typedef struct	s_light
 {
 	t_p3			o;
 	double			br;
 	int				color;
 	struct s_light	*next;
-}					t_light;
+}				t_light;
 
 typedef struct	s_cam
 {
@@ -156,59 +156,166 @@ typedef struct	s_pyr
 	t_p3	corner[4];
 }				t_pyr;
 
-void	error_check(int n, char *error_message);
-void	check_values(double n, double min, double max, char *err);
-void	comma(char **str);
-int		parse_color(char **str);
-void	*err_malloc(unsigned int n);
-t_p3	parse_p3(char **str);
-void	ft_addnewlst_back(t_fig **alst);
-void	skip_space(char **str);
-int		rt_atoi(char **str);
-double	rt_atof(char **str);
-void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
-void	parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av);
-void	parse_resolution(t_scene *data, char *str);
-void	parse_ambient(t_scene *data, char *str);
-void	parse_camera(t_mlx *mlx, t_scene *data, char *str);
-void	parse_light(t_scene **data, char *str);
-void	parse_cylinder(t_fig **elem, char *str);
-void	parse_sphere(t_fig **elem, char *str);
-void	parse_square(t_fig **elem, char *str);
-void	parse_plane(t_fig **elem, char *str);
-void	parse_triangle(t_fig **elem, char *str);
-void	parse_cube(t_fig **elem, char *str);
-void	parse_pyramid(t_fig **elem, char *str);
-void	save_args2(t_fig **lst, char *str);
-void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
-void	multithreading(t_wrap *wrapper);
-void	wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
-void	render_scene(t_wrap *w);
-int		*sample_pixel(int *edge_color, int last[2], t_rss rss, t_wrap *w);
-int		calc_ray(int n, t_rss rss, t_wrap *w);
-void	try_all_inter(t_v3 ray, t_fig *lst, t_fig *close_fig, double *close_inter);
-int		trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth);
-double	sphere_inter(t_p3 o, t_p3 d, t_fig *lst);
-double	plane_inter(t_p3 o, t_p3 d, t_p3 plane_p, t_p3 plane_nv);
-double	triangle_inter(t_p3 o, t_p3 d, t_fig *lst);
-double	square_inter(t_p3 o, t_p3 d, t_fig *lst);
-double	cylinder_inter(t_p3 o, t_p3 d, t_fig *lst);
-double	cube_inter(t_p3 o, t_p3 d, t_fig *lst);
-double	pyramid_inter(t_p3 o, t_p3 d, t_fig *lst);
-t_p3	reflect_ray(t_p3 ray, t_p3 normal);
-double	calc_specular(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst);
-void	add_coefficient(double (*rgb)[3], double coef, int color);
-int		is_light(t_p3 o, t_p3 d, t_fig *lst);
-void	compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst);
-int		color_x_light(int color, double rgb[3]);
-void	apply_texture(int texture, t_inter *inter, t_fig *lst);
-int		cproduct(int color, double coef);
-int		cadd(int color_a, int color_b);
-void	calc_normal(t_inter *inter, t_p3 d, t_fig *lst);
-t_p3	refract_ray(t_p3 d, t_p3 normal, t_fig *lst);
-int		average(int color1, int color2);
-int		average_supersampled_color(int *color);
-int		color_difference(int color, int color2);
-int		supersample(int *color, t_rss rss, t_wrap *w);
-int		main(int ac, char **av);
+typedef struct	s_bmp_header
+{
+	char			type[2];
+	unsigned int	size;
+	unsigned int	reserved;
+	unsigned int	offset;
+}				t_bmphead;
+
+typedef struct	s_dib_header
+{
+	unsigned int	size;
+	int				width;
+	int				height;
+	unsigned short	colplanes;
+	unsigned short	bpp;
+	unsigned int	compression;
+	unsigned int	img_size;
+	int				x_ppm;
+	int				y_ppm;
+	unsigned int	color_number;
+	unsigned int	important_color;
+}				t_dibhead;
+
+/*
+**			minirt.c
+*/
+int				calc_pixel_color(int *edge_color, int last[2], t_wrap *w);
+void			render_scene(t_wrap *w);
+int				main(int ac, char **av);
+
+/*
+**			camera_calc.c
+*/
+int				calc_ray(int n, t_rss rss, t_wrap *w);
+
+/*
+**			make_bmpfile.c && make_bmpfile_utils.c
+*/
+void			make_bmp(t_mlx mlx, t_scene data, char *name);
+int				get_file_name(char *name);
+int				get_sub_len(char *name);
+
+/*
+**			parse1.c && parse2.c && parse3.c && parse4.c
+*/
+void			parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av);
+void			parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+void			save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+void			save_args2(t_fig **lst, char *str);
+void			parse_resolution(t_scene *data, char *str);
+void			parse_ambient(t_scene *data, char *str);
+void			parse_camera(t_mlx *mlx, t_scene *data, char *str);
+void			parse_light(t_scene **data, char *str);
+void			parse_cylinder(t_fig **elem, char *str);
+void			parse_sphere(t_fig **elem, char *str);
+void			parse_square(t_fig **elem, char *str);
+void			parse_plane(t_fig **elem, char *str);
+void			parse_triangle(t_fig **elem, char *str);
+void			parse_cube(t_fig **elem, char *str);
+void			parse_pyramid(t_fig **elem, char *str);
+
+/*
+**			parse_utils1.c && parse_utils2.c
+*/
+void			comma(char **str);
+int				parse_color(char **str);
+t_p3			parse_p3(char **str);
+void			ft_addnewlst_back(t_fig **alst);
+void			skip_space(char **str);
+int				rt_atoi(char **str);
+double			rt_atof(char **str);
+
+/*
+**			error_checking.c
+*/
+void			*err_malloc(unsigned int n);
+void			error_check(int n, char *error_message);
+void			check_values(double n, double min, double max, char *err);
+void			success_message(int ac);
+
+/*
+**			thread.c
+*/
+void			multithreading(t_wrap *wrapper);
+void			wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
+
+/*
+**			sample_pixel.c
+*/
+int				*sample_pixel(int *edge_color, int last[2],
+											t_rss rss, t_wrap *w);
+
+/*
+**			ray_tracing.c
+*/
+int				trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth);
+void			try_all_inter(t_v3 ray, t_fig *lst,
+				t_fig *close_fig, double *close_inter);
+void			calc_normal(t_inter *inter, t_p3 d, t_fig *lst);
+t_p3			refract_ray(t_p3 d, t_p3 normal, t_fig *lst);
+
+/*
+**			sphere.c
+*/
+double			sphere_inter(t_p3 o, t_p3 d, t_fig *lst);
+
+/*
+**			pl_sq_tr.c
+*/
+double			plane_inter(t_p3 o, t_p3 d, t_p3 plane_p, t_p3 plane_nv);
+double			triangle_inter(t_p3 o, t_p3 d, t_fig *lst);
+double			square_inter(t_p3 o, t_p3 d, t_fig *lst);
+
+/*
+**			cylinder.c
+*/
+double			cylinder_inter(t_p3 o, t_p3 d, t_fig *lst);
+
+/*
+**			compound_inter.c
+*/
+double			cube_inter(t_p3 o, t_p3 d, t_fig *lst);
+double			pyramid_inter(t_p3 o, t_p3 d, t_fig *lst);
+
+/*
+**			light_calc.c
+*/
+t_p3			reflect_ray(t_p3 ray, t_p3 normal);
+double			calc_specular(t_v3 ray, t_inter *inter,
+							t_scene data, t_fig *lst);
+void			add_coefficient(double (*rgb)[3], double coef, int color);
+int				is_light(t_p3 o, t_p3 d, t_fig *lst);
+void			compute_light(t_v3 ray, t_inter *inter,
+							t_scene data, t_fig *lst);
+
+/*
+**			color_calc.c
+*/
+int				color_x_light(int color, double rgb[3]);
+int				cproduct(int color, double coef);
+int				cadd(int color_a, int color_b);
+int				color_difference(int color, int color2);
+
+/*
+**			supersample.c
+*/
+int				supersample(int *color, t_rss rss, t_wrap *w);
+int				average(int color1, int color2);
+int				average_supersampled_color(int *color);
+
+/*
+**			supersample.c
+*/
+void			apply_texture(int texture, t_inter *inter, t_fig *lst);
+
+/*
+**			mlx_func.c
+*/
+void			init_mlx(t_mlx *mlx, t_scene *data);
+void			start_mlx(t_mlx mlx, t_scene data);
+int				close_red_button();
+int				key_press(int keycode, t_mlx *mlx);
 #endif

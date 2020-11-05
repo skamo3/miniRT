@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 08:05:23 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/03 20:28:48 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 06:39:55 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void		compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
 	while (data.l)
 	{
 		direction = vsubstract(data.l->o, inter->p);
-		if (is_light(inter->p, direction, lst) && vdot(inter->normal, direction) > 0)
+		if (is_light(inter->p, direction, lst)
+				&& vdot(inter->normal, direction) > 0)
 		{
 			light = data.l->br * vcos(inter->normal, direction);
 			add_coefficient(&rgb, light, data.l->color);

@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 19:29:38 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/30 19:32:19 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 05:24:14 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static t_p3		calc_cy_normal(double x[2], t_p3 o, t_p3 d, t_fig *lst)
 		dist = x[0] < x[1] ? lst->fig.cy.dist1 : lst->fig.cy.dist2;
 		res = x[0] < x[1] ? x[0] : x[1];
 	}
-	else if (lst->fig.cy.dist1 <= 0 && lst->fig.cy.dist1 <= lst->fig.cy.h)
+	else if (lst->fig.cy.dist1 >= 0 && lst->fig.cy.dist1 <= lst->fig.cy.h
+			&& x[0] > EPSILON)
 	{
 		dist = lst->fig.cy.dist1;
 		res = x[0];
@@ -71,10 +72,13 @@ static double	cy_intersection(t_p3 o, t_p3 d, t_p3 *normal, t_fig *lst)
 
 	if (solve_cylinder(x, o, d, lst) == 0)
 		return (INFINITY);
-	lst->fig.cy.dist1 = vdot(lst->fig.cy.nv, vsubstract(scal_x_vec(x[0], d), vsubstract(lst->fig.cy.c, o)));
-	lst->fig.cy.dist2 = vdot(lst->fig.cy.nv, vsubstract(scal_x_vec(x[1], d), vsubstract(lst->fig.cy.c, o)));
-	if (!(lst->fig.cy.dist1 >= 0 && lst->fig.cy.dist1 <= lst->fig.cy.h)
-			|| (lst->fig.cy.dist2 >= 0 && lst->fig.cy.dist2 <= lst->fig.cy.h))
+	lst->fig.cy.dist1 = vdot(lst->fig.cy.nv, vsubstract(scal_x_vec(x[0], d),
+				vsubstract(lst->fig.cy.c, o)));
+	lst->fig.cy.dist2 = vdot(lst->fig.cy.nv, vsubstract(scal_x_vec(x[1], d),
+				vsubstract(lst->fig.cy.c, o)));
+	if (!((lst->fig.cy.dist1 >= 0 && lst->fig.cy.dist1 <= lst->fig.cy.h
+					&& x[0] > EPSILON) || (lst->fig.cy.dist2 >= 0 &&
+						lst->fig.cy.dist2 <= lst->fig.cy.h && x[1] > EPSILON)))
 		return (INFINITY);
 	*normal = calc_cy_normal(x, o, d, lst);
 	return (x[0]);

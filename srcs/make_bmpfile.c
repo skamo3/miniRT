@@ -6,41 +6,34 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 04:55:20 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/05 06:06:39 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 06:26:35 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-int		create_file(char *name, int i, int j)
+static int	create_file(char *name, int i, int j)
 {
+	char	*tmp;
 	char	*bmpname;
-	int		path;
 	int		fd;
 
-	path = 0;
-	bmpname = (char *)err_malloc(ft_strlen(name) + 8);
-	while (name[i])
-		if (name[i++] == '/')
-			path++;
-	i = 0;
-	while (path && name[i])
-		if (name[i++] == '/')
-			path--;
-	ft_strcat(bmpname, "images/");
-	j = 7;
-	while (name[i] && name[i] != '.')
-		bmpname[j++] = name[i++];
-	bmpname[j] = 0;
-	ft_strcat(bmpname, ".bmp");
+	i = get_file_name(name);
+	bmpname = ft_strdup("images/");
+	j = get_sub_len(&name[i]);
+	tmp = ft_substr(name, i, j);
+	name = ft_strjoin(tmp, ".bmp");
+	free(tmp);
+	bmpname = ft_strjoin(bmpname, name);
 	if (!((fd = open(bmpname, O_WRONLY | O_CREAT | O_TRUNC,
-						S_IRUSR | S_IWUSR)) > 0))
+						S_IRWXU)) > 0))
 		error_check(7, "bmp file can not open");
+	printf("%s\n", bmpname);
 	free(bmpname);
 	return (fd);
 }
 
-void	create_header(t_scene data, t_bmphead *header, t_dibhead *dib)
+static void	create_header(t_scene data, t_bmphead *header, t_dibhead *dib)
 {
 	header->type[0] = 0x42;
 	header->type[1] = 0x4D;
@@ -60,7 +53,7 @@ void	create_header(t_scene data, t_bmphead *header, t_dibhead *dib)
 	dib->important_color = 0;
 }
 
-void	write_header(int fd, t_bmphead header, t_dibhead dib)
+static void	write_header(int fd, t_bmphead header, t_dibhead dib)
 {
 	write(fd, &header.type, 2);
 	write(fd, &header.size, 4);
@@ -79,7 +72,7 @@ void	write_header(int fd, t_bmphead header, t_dibhead dib)
 	write(fd, &dib.important_color, 4);
 }
 
-void	write_file(int fd, t_scene data, t_mlx mlx)
+static void	write_file(int fd, t_scene data, t_mlx mlx)
 {
 	char	*pixel_array;
 	int		image_size;
@@ -87,9 +80,22 @@ void	write_file(int fd, t_scene data, t_mlx mlx)
 	int		j;
 
 	pixel_array = (char *)err_malloc(mlx.cam->size_line * data.yres);
+	image_size = data.xres * data.yres;
+	i = 0;
+	j = 0;
+	while (i < image_size)
+	{
+		pixel_array[j++] = mlx.cam->px_img[i] & 255;
+		pixel_array[j++] = (mlx.cam->px_img[i] & 255 << 8) >> 8;
+		pixel_array[j++] = (mlx.cam->px_img[i] & 255 << 16) >> 16;
+		pixel_array[j++] = 0;
+		i++;
+	}
+	write(fd, pixel_array, mlx.cam->size_line * data.yres);
+	free(pixel_array);
 }
 
-void	make_bmp(t_mlx mlx, t_scene data, char *name)
+void		make_bmp(t_mlx mlx, t_scene data, char *name)
 {
 	t_bmphead	header;
 	t_dibhead	dib;
@@ -103,4 +109,5 @@ void	make_bmp(t_mlx mlx, t_scene data, char *name)
 	create_header(data, &header, &dib);
 	write_header(fd, header, dib);
 	write_file(fd, data, mlx);
+	close(fd);
 }

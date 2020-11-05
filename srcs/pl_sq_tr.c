@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 19:26:02 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/30 19:28:35 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 05:22:46 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ double		square_inter(t_p3 o, t_p3 d, t_fig *lst)
 
 	id = plane_inter(o, d, lst->fig.sq.c, lst->normal);
 	ip = vadd(o, scal_x_vec(id, d));
-	sq_info.floor = fabs(lst->normal.y) == 1 ? vdefine(1, 0, 0) : vdefine(0, 1, 0);
+	sq_info.floor = fabs(lst->normal.y) == 1 ?
+		vdefine(1, 0, 0) : vdefine(0, 1, 0);
 	sq_info.half_size = vcross(lst->normal, sq_info.floor);
 	sq_info.center_to_ip = vsubstract(ip, lst->fig.sq.c);
 	cos1 = fabs(vcos(sq_info.half_size, sq_info.center_to_ip));

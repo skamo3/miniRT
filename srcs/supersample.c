@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 23:26:47 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/04 23:27:27 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/06 06:41:21 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static int	supersample_second(int *color, int center, t_rss rss, t_wrap *w)
 	return (col);
 }
 
-
 static int	supersample_third(int *color, int center, t_rss rss, t_wrap *w)
 {
 	t_rss	tmp;
@@ -93,7 +92,7 @@ static int	supersample_fourth(int *color, int center, t_rss rss, t_wrap *w)
 	return (col);
 }
 
-int	supersample(int *color, t_rss rss, t_wrap *w)
+int			supersample(int *color, t_rss rss, t_wrap *w)
 {
 	int	center;
 	int	n;
