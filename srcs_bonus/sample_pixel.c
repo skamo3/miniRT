@@ -6,18 +6,18 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:08:10 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 16:39:03 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:11:35 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static int	*sample_first(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 {
 	int	*color;
 
 	color = (int *)err_malloc(sizeof(int) * 4);
-	if (rss.y == 0)
+	if (rss.y == w->data.yres / THREAD_NUM * w->thread_id)
 	{
 		color[0] = calc_ray(0, rss, w);
 		color[1] = calc_ray(2, rss, w);
@@ -44,7 +44,7 @@ static int	*sample_center(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 	int	*color;
 
 	color = (int *)err_malloc(sizeof(int) * 4);
-	if (rss.y == 0)
+	if (rss.y == w->data.yres / THREAD_NUM * w->thread_id)
 	{
 		color[0] = last[1];
 		color[1] = calc_ray(2, rss, w);
@@ -71,7 +71,7 @@ static int	*sample_last(int *edge_color, int last[2], t_rss rss, t_wrap *w)
 	int	*color;
 
 	color = (int *)err_malloc(sizeof(int) * 4);
-	if (rss.y == 0)
+	if (rss.y == w->data.yres / THREAD_NUM * w->thread_id)
 	{
 		color[0] = last[1];
 		color[1] = calc_ray(2, rss, w);

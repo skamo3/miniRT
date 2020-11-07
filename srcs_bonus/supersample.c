@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 23:26:47 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/06 06:41:21 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:11:50 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static int	supersample_first(int *color, int center, t_rss rss, t_wrap *w)
 {

@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 21:15:54 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/19 14:35:50 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:12:12 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static void	*render_thread(void *ptr)
 {

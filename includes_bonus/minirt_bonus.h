@@ -6,12 +6,12 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 17:13:31 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 16:56:08 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MINIRT_BONUS_H
+# define MINIRT_BONUS_H
 
 # include "mlx.h"
 # include <math.h>
@@ -24,6 +24,8 @@
 # include "../utils/vec/vec3.h"
 # include "figures.h"
 # include "key_code.h"
+# include <pthread.h>
+# include <stdio.h>
 
 # define SP 0
 # define PL 1
@@ -36,7 +38,10 @@
 # define WIN_SIZE_X 2560
 # define WIN_SIZE_Y 1440
 
+# define THREAD_NUM 4
 # define EPSILON 0.00001
+
+# define REFLECTION_LIMIT 3
 
 typedef	struct	s_v3
 {
@@ -50,6 +55,11 @@ typedef struct	s_fig
 	union u_fig		fig;
 	int				color;
 	t_p3			normal;
+	int				specular;
+	double			refl_idx;
+	double			refr_idx;
+	int				texture;
+	double			wavelength;
 	struct s_fig	*next;
 }				t_fig;
 
@@ -101,6 +111,7 @@ typedef struct	s_wrap
 	t_mlx	mlx;
 	t_scene	data;
 	t_fig	*lst;
+	int		thread_id;
 	int		x;
 	int		y;
 }				t_wrap;
@@ -117,6 +128,7 @@ typedef struct	s_rss
 typedef struct	s_inter
 {
 	int		color;
+	int		ref_color;
 	t_p3	normal;
 	t_p3	p;
 }				t_inter;
@@ -127,6 +139,22 @@ typedef struct	s_sq_info
 	t_p3	floor;
 	t_p3	center_to_ip;
 }				t_sq_info;
+
+typedef struct	s_cube
+{
+	t_fig	sq;
+	t_p3	center;
+	t_p3	normal[6];
+}				t_cube;
+
+typedef struct	s_pyr
+{
+	t_fig	sq;
+	t_fig	tr;
+	t_p3	vertex_point;
+	t_p3	normal[5];
+	t_p3	corner[4];
+}				t_pyr;
 
 typedef struct	s_bmp_header
 {
@@ -176,6 +204,7 @@ int				get_sub_len(char *name);
 void			parse(t_mlx *mlx, t_scene *data, t_fig **lst, char **av);
 void			parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
 void			save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str);
+void			save_args2(t_fig **lst, char *str);
 void			parse_resolution(t_scene *data, char *str);
 void			parse_ambient(t_scene *data, char *str);
 void			parse_camera(t_mlx *mlx, t_scene *data, char *str);
@@ -185,6 +214,8 @@ void			parse_sphere(t_fig **elem, char *str);
 void			parse_square(t_fig **elem, char *str);
 void			parse_plane(t_fig **elem, char *str);
 void			parse_triangle(t_fig **elem, char *str);
+void			parse_cube(t_fig **elem, char *str);
+void			parse_pyramid(t_fig **elem, char *str);
 
 /*
 **			parse_utils1.c && parse_utils2.c
@@ -206,6 +237,12 @@ void			check_values(double n, double min, double max, char *err);
 void			success_message(int ac);
 
 /*
+**			thread.c
+*/
+void			multithreading(t_wrap *wrapper);
+void			wrap_data(t_mlx mlx, t_scene data, t_fig *lst, t_wrap *wrapper);
+
+/*
 **			sample_pixel.c
 */
 int				*sample_pixel(int *edge_color, int last[2],
@@ -214,7 +251,7 @@ int				*sample_pixel(int *edge_color, int last[2],
 /*
 **			ray_tracing.c
 */
-int				trace_ray(t_p3 o, t_p3 d, t_wrap *w);
+int				trace_ray(t_p3 o, t_p3 d, t_wrap *w, int depth);
 void			try_all_inter(t_v3 ray, t_fig *lst,
 				t_fig *close_fig, double *close_inter);
 void			calc_normal(t_inter *inter, t_p3 d, t_fig *lst);
@@ -238,8 +275,17 @@ double			square_inter(t_p3 o, t_p3 d, t_fig *lst);
 double			cylinder_inter(t_p3 o, t_p3 d, t_fig *lst);
 
 /*
+**			compound_inter.c
+*/
+double			cube_inter(t_p3 o, t_p3 d, t_fig *lst);
+double			pyramid_inter(t_p3 o, t_p3 d, t_fig *lst);
+
+/*
 **			light_calc.c
 */
+t_p3			reflect_ray(t_p3 ray, t_p3 normal);
+double			calc_specular(t_v3 ray, t_inter *inter,
+							t_scene data, t_fig *lst);
 void			add_coefficient(double (*rgb)[3], double coef, int color);
 int				is_light(t_p3 o, t_p3 d, t_fig *lst);
 void			compute_light(t_v3 ray, t_inter *inter,
@@ -249,7 +295,21 @@ void			compute_light(t_v3 ray, t_inter *inter,
 **			color_calc.c
 */
 int				color_x_light(int color, double rgb[3]);
+int				cproduct(int color, double coef);
+int				cadd(int color_a, int color_b);
+int				color_difference(int color, int color2);
+
+/*
+**			supersample.c
+*/
+int				supersample(int *color, t_rss rss, t_wrap *w);
+int				average(int color1, int color2);
 int				average_supersampled_color(int *color);
+
+/*
+**			texture.c
+*/
+void			apply_texture(int texture, t_inter *inter, t_fig *lst);
 
 /*
 **			mlx_func.c

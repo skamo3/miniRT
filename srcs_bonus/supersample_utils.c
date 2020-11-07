@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 23:29:35 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/06 06:41:37 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:11:56 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 int	average(int color1, int color2)
 {

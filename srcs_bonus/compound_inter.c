@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 20:43:20 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/06 06:39:00 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:26 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static void	init_cube(t_cube *cube, t_fig *lst)
 {

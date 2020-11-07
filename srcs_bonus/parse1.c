@@ -6,11 +6,19 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:40 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 16:58:16 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:10:34 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
+
+void	save_args2(t_fig **lst, char *str)
+{
+	if (*str == 'p' && *(str + 1) == 'y' && *(str++) && *(str++))
+		parse_pyramid(lst, str);
+	else if (*str == 't' && *(str + 1) == 'r' && *(str++) && *(str++))
+		parse_triangle(lst, str);
+}
 
 void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 {
@@ -22,6 +30,8 @@ void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 		parse_camera(mlx, data, ++str);
 	else if (*str == 'c' && *(str + 1) == 'y' && *(str++) && *(str++))
 		parse_cylinder(lst, str);
+	else if (*str == 'c' && *(str + 1) == 'u' && *(str++) && *(str++))
+		parse_cube(lst, str);
 	else if (*str == 'l' && (*(str + 1) == 32 || *(str + 1) == 9))
 		parse_light(&data, ++str);
 	else if (*str == 's' && *(str + 1) == 'p' && *(str++) && *(str++))
@@ -30,8 +40,7 @@ void	save_args(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)
 		parse_square(lst, str);
 	else if (*str == 'p' && *(str + 1) == 'l' && *(str++) && *(str++))
 		parse_plane(lst, str);
-	else if (*str == 't' && *(str + 1) == 'r' && *(str++) && *(str++))
-		parse_triangle(lst, str);
+	save_args2(lst, str);
 }
 
 void	parsing(t_mlx *mlx, t_scene *data, t_fig **lst, char *str)

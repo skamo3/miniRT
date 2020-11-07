@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 19:02:54 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 16:57:01 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:43 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 void	error_check(int n, char *error_message)
 {
@@ -36,7 +36,8 @@ void	success_message(int ac)
 {
 	if (ac == 2)
 	{
-		ft_printf("\nminiRT make Scene successfully rendered");
+		ft_printf("\nminiRT make Scene successfully rendered with ");
+		ft_printf("%d thread\n", THREAD_NUM);
 		ft_printf("press ESC or click RED BUTTON to close program\n");
 		ft_printf("press space to change another camera\n\n");
 	}

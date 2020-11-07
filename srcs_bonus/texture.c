@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 20:00:01 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/06 06:41:47 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:12:03 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static t_p3	sinwave(t_inter *inter, t_fig *lst)
 {

@@ -6,11 +6,33 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 08:05:23 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 15:06:28 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:09:00 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
+
+t_p3		reflect_ray(t_p3 ray, t_p3 normal)
+{
+	return (vsubstract(scal_x_vec(2 * vdot(normal, ray), normal), ray));
+}
+
+double		calc_specular(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
+{
+	double	light;
+	t_p3	direction;
+	t_p3	p_to_cam;
+	t_p3	reflected;
+
+	direction = vsubstract(data.l->o, inter->p);
+	p_to_cam = vsubstract(ray.o, inter->p);
+	reflected = reflect_ray(direction, inter->normal);
+	if (vdot(reflected, p_to_cam) > 0)
+		light = data.l->br * pow(vcos(reflected, p_to_cam), lst->specular);
+	else
+		light = 0;
+	return (light);
+}
 
 void		add_coefficient(double (*rgb)[3], double coef, int color)
 {
@@ -40,6 +62,10 @@ int			is_light(t_p3 o, t_p3 d, t_fig *lst)
 			in = square_inter(o, d, lst);
 		else if (lst->flag == CY)
 			in = cylinder_inter(o, d, lst);
+		else if (lst->flag == CU)
+			in = cube_inter(o, d, lst);
+		else if (lst->flag == PY)
+			in = pyramid_inter(o, d, lst);
 		if (in > EPSILON && in < 1)
 			return (0);
 		lst = lst->next;
@@ -66,6 +92,11 @@ void		compute_light(t_v3 ray, t_inter *inter, t_scene data, t_fig *lst)
 			add_coefficient(&rgb, light, data.l->color);
 		}
 		ray.o = ray.o;
+		if (lst->specular)
+		{
+			light = calc_specular(ray, inter, data, lst);
+			add_coefficient(&rgb, light, data.l->color);
+		}
 		data.l = data.l->next;
 	}
 	inter->color = color_x_light(inter->color, rgb);

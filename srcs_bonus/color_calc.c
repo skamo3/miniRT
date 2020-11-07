@@ -6,11 +6,31 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 08:17:17 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 15:22:47 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:19 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
+
+int	color_difference(int color1, int color2)
+{
+	int	mask;
+	int	r[2];
+	int	g[2];
+	int	b[2];
+	int	distance_exp2;
+
+	mask = 255;
+	r[0] = (color1 & (mask << 16)) >> 16;
+	g[0] = (color1 & (mask << 8)) >> 8;
+	b[0] = color1 & mask;
+	r[1] = (color2 & (mask << 16)) >> 16;
+	g[1] = (color2 & (mask << 8)) >> 8;
+	b[1] = color2 & mask;
+	distance_exp2 =
+		pow((r[1] - r[0]), 2) + pow((g[1] - g[0]), 2) + pow((b[1] - b[0]), 2);
+	return (distance_exp2 > 1000);
+}
 
 int	color_x_light(int color, double rgb[3])
 {
@@ -31,25 +51,33 @@ int	color_x_light(int color, double rgb[3])
 	return ((r << 16) | (g << 8) | b);
 }
 
-int	average_supersampled_color(int *color)
+int	cproduct(int color, double coef)
 {
-	int	ss_color[3];
 	int	mask;
-	int	n;
+	int	r;
+	int	g;
+	int	b;
 
-	ft_memset(ss_color, 0, sizeof(int) * 3);
 	mask = 255;
-	n = 0;
-	while (n < 4)
-	{
-		ss_color[0] += (color[n] & (mask << 16)) >> 16;
-		ss_color[1] += (color[n] & (mask << 8)) >> 8;
-		ss_color[2] += color[n] & mask;
-		n++;
-	}
-	ss_color[0] = ss_color[0] / 4;
-	ss_color[1] = ss_color[1] / 4;
-	ss_color[2] = ss_color[2] / 4;
-	free(color);
-	return ((ss_color[0] << 16) | (ss_color[1] << 8) | ss_color[2]);
+	r = coef * ((color & (mask << 16)) >> 16);
+	g = coef * ((color & (mask << 8)) >> 8);
+	b = coef * (color & mask);
+	r = r > 255 ? 255 : r;
+	g = g > 255 ? 255 : g;
+	b = b > 255 ? 255 : b;
+	return ((r << 16) | (g << 8) | b);
+}
+
+int	cadd(int color_a, int color_b)
+{
+	int	mask;
+	int	r;
+	int	g;
+	int	b;
+
+	mask = 255;
+	r = ((color_a & (mask << 16)) + (color_b & (mask << 16))) & (mask << 16);
+	g = ((color_a & (mask << 8)) + (color_b & (mask << 8))) & (mask << 8);
+	b = ((color_a & mask) + (color_b & mask)) & mask;
+	return (r | g | b);
 }

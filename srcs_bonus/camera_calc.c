@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 19:19:59 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 15:03:10 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:10 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static t_p3	set_camera(int n, t_rss rss, t_mlx mlx)
 {
@@ -41,7 +41,7 @@ static t_p3	look_at(t_p3 d, t_p3 cam_nv)
 	temp = vdefine(0, 1, 0);
 	z_axis = cam_nv;
 	if (cam_nv.y == 1 || cam_nv.y == -1)
-		x_axis = cam_nv.y == 1 ? vdefine(1, 0, 0) : vdefine(-1, 0, 0);
+		x_axis = cam_nv.y == 1 ? (t_p3){1, 0, 0} : (t_p3){-1, 0, 0};
 	else
 		x_axis = vcross(temp, z_axis);
 	y_axis = vcross(z_axis, x_axis);
@@ -59,6 +59,6 @@ int			calc_ray(int n, t_rss rss, t_wrap *w)
 	color = 0;
 	d = set_camera(n, rss, w->mlx);
 	d = look_at(d, w->mlx.cam->nv);
-	color = trace_ray(w->mlx.cam->o, d, w);
+	color = trace_ray(w->mlx.cam->o, d, w, REFLECTION_LIMIT);
 	return (color);
 }

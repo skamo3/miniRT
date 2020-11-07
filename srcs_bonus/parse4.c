@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 19:12:09 by joockim           #+#    #+#             */
-/*   Updated: 2020/10/15 19:19:45 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:10:52 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 void	parse_cube(t_fig **elem, char *str)
 {

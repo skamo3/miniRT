@@ -6,11 +6,11 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 19:29:38 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 15:37:20 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:34 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../includes_bonus/minirt_bonus.h"
 
 static int		solve_cylinder(double x[2], t_p3 o, t_p3 d, t_fig *lst)
 {
@@ -84,13 +84,54 @@ static double	cy_intersection(t_p3 o, t_p3 d, t_p3 *normal, t_fig *lst)
 	return (x[0]);
 }
 
+static double	caps_intersection(t_p3 o, t_p3 d, t_fig *lst)
+{
+	double	id1;
+	double	id2;
+	t_p3	ip1;
+	t_p3	ip2;
+	t_p3	c2;
+
+	c2 = vadd(lst->fig.cy.c, scal_x_vec(lst->fig.cy.h, lst->fig.cy.nv));
+	id1 = plane_inter(o, d, lst->fig.cy.c, lst->fig.cy.nv);
+	id2 = plane_inter(o, d, c2, lst->fig.cy.nv);
+	if (id1 < INFINITY || id2 < INFINITY)
+	{
+		ip1 = vadd(o, scal_x_vec(id1, d));
+		ip2 = vadd(o, scal_x_vec(id2, d));
+		if ((id1 < INFINITY && distance(ip1, lst->fig.cy.c) <= lst->fig.cy.r)
+				&& (id2 < INFINITY && distance(ip2, c2) <= lst->fig.cy.r))
+			return (id1 < id2 ? id1 : id2);
+		else if (id1 < INFINITY &&
+				distance(ip1, lst->fig.cy.c) <= lst->fig.cy.r)
+			return (id1);
+		else if (id2 < INFINITY &&
+				distance(ip2, c2) <= lst->fig.cy.r)
+			return (id2);
+	}
+	return (INFINITY);
+}
+
 double			cylinder_inter(t_p3 o, t_p3 d, t_fig *lst)
 {
 	double	cy_inter;
+	double	caps_inter;
 	t_p3	cy_normal;
 
 	cy_inter = cy_intersection(o, d, &cy_normal, lst);
-	if (cy_inter < INFINITY)
-		return (cy_inter);
+	if (lst->texture == 4)
+		caps_inter = INFINITY;
+	else
+		caps_inter = caps_intersection(o, d, lst);
+	if (cy_inter < INFINITY || caps_inter < INFINITY)
+	{
+		if (cy_inter < caps_inter)
+		{
+			lst->normal = cy_normal;
+			return (cy_inter);
+		}
+		lst->normal = lst->fig.cy.nv;
+		return (caps_inter);
+	}
 	return (INFINITY);
 }
