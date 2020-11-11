@@ -6,7 +6,7 @@
 /*   By: joockim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:27 by joockim           #+#    #+#             */
-/*   Updated: 2020/11/07 16:56:08 by joockim          ###   ########.fr       */
+/*   Updated: 2020/11/11 19:17:17 by joockim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include "figures.h"
 # include "key_code.h"
 # include <pthread.h>
-# include <stdio.h>
 
 # define SP 0
 # define PL 1
